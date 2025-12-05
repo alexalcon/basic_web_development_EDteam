@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <style>
+            em {
+                font-style: normal;
+            }
+            kbd {
+                font-family: console, monospace;
+                background-color: lightgray;
+                border: 1px solid gray;
+                border-radius: 3px;
+                padding: 2px 4px;
+                box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            }
+            sup {
+                font-size: smaller;
+                vertical-align: super;
+                color: rgb(231, 81, 31);
+            }
+            sub {
+                font-size: smaller;
+                vertical-align: sub;
+                color: blue;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <!-- web semantics -->
+		<!-- 
+			line elements are used to define the meaning of the content:
+			<em> is for emphasis
+			<strong> is for strong importance
+			<mark> is for marked/highlighted text
+			<code> is for code snippets
+			<q> is for short inline quotations
+            <time> is for dates and times
+            <kbd> is for keyboard input
+            <sup> is for superscript text
+            <sub> is for subscript text
+            <del> is for deleted text
+		-->
+		<p>This is an <em>emphasized</em> word.</p>
+		<p>This is a <strong>strongly important</strong> word.</p>
+		<p>This is a <mark>marked</mark> word.</p>
+		<p>This is a <code>code snippet</code>.</p>
+		<p>This is a <q>short inline quotation</q>.</p>
+        <p>This is a <time datetime="2024-06-01T12:00">date and time</time>.</p>
+        <p>This is a <kbd>keyboard input</kbd></p>
+        <p><kbd>CTRL</kbd>+<kbd>C</kbd></p>
+        <p>This is superscript text: E = mc<sup>2</sup></p>
+        <p>This is subscript text: H<sub>2</sub>O</sub></p>
+        <p>This is <del>deleted</del> text.</p>
+
+        <hr>
+
+        <!--
+            the following semantinc elements are not inline elements:
+                <span> - generic inline container (is the <div> of inline elements)
+                         it is used mostly for styling purposes
+                <b> - text to be stylistically different from normal text
+                <i> - text to be in an alternate voice or mood
+                <u> - text to be underlined
+         -->
+        <p>This is a <span style="color: rgb(0, 238, 255); font-weight: bold;">styled span</span> element.</p>
+        <p>This is a <b>bold</b> word.</p>
+        <p>This is an <i>italic</i> word.</p>
+        <p>This is an <u>underlined</u> word.</p>
+    </body>
+</html>
