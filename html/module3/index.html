@@ -21,6 +21,18 @@
 			body {
 				font-family: console, monospace;
 			}
+			section {
+				border: 2px solid black;
+				margin: 10px;
+				padding: 10px;
+				background-color: aqua;
+			}
+			article {
+				border: 2px dashed red;
+				margin: 10px;
+				padding: 10px;
+				background-color: lightgreen;
+			}
 		</style>
     </head>
 
@@ -49,6 +61,64 @@
 		
 		<h6>This is a heading 6</h6>
 		<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum porro cum nobis ipsa unde a! Itaque doloremque voluptatibus deserunt impedit quis eligendi, minima earum inventore, odio totam id pariatur atque?</p>
+		<!-- ───────────────────────────────────────────────────────────────────── -->
+		
+		<hr> <!-- horizontal rule to separate content -->
+
+		<!-- section tags -->
+		<!-- 
+			 these tags are used to define sections in a document, they 
+		     group related content together 
+			 
+			 	header: typically contains introductory content or navigational links
+			 	main: represents the main content of the body 
+			 	footer: typically contains information about the author, 
+				 	 	copyright information, or links to related documents
+				article: represents a self-contained (INDEPENDENT) composition in a 
+                 		 document
+				section: defines a section in a document (a division of content)
+			 	nav: contains navigation links 
+			
+			section tags should be used to improve the SEMANTIC STRUCTURE of a web 
+			page and enhance accessibility for users relying on assistive technologies
+		-->
+		<!-- ───────────────────────────────────────────────────────────────────── -->
+		<header>
+			<p>Page header.</p>
+		</header>
+		
+		<main>
+			<h1>Page main content.</h1>
+			<p>Some text without section tag.</p>
+
+			<!-- 
+			     as a good practice, use section tags to group related content, 
+			     and always start each section with a heading 
+
+				 document sections (a division of content)
+			-->
+			<section>
+				<h2>Section Title</h2>
+				<p>This is a section within the main content.</p>
+			</section>
+
+			<section>
+				<h2>Another Section Title</h2>
+				<p>This is another section within the main content.</p>
+			</section>
+
+			<!-- self-contained (INDEPENDENT) composition -->
+			<article> 
+				<h2>Article Title</h2>
+				<p>Article text.</p>
+				<h3>Article Subheading</h3>
+				<p>Article subheading text.</p>
+			</article>
+		</main>
+		
+		<footer>
+			<p>Page footer.</p>
+		</footer>
 		<!-- ───────────────────────────────────────────────────────────────────── -->
     </body>
 </html>
