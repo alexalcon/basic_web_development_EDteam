@@ -36,6 +36,12 @@
 				padding: 10px;
 				background-color: lightgreen;
 			}
+			aside {
+				border: 2px dotted orange;
+				margin: 10px;
+				padding: 10px;
+				background-color: lightyellow;
+			}
 		</style>
     </head>
 
@@ -81,6 +87,11 @@
                  		 document
 				section: defines a section in a document (a division of content)
 			 	nav: contains navigation links 
+				aside: represents content that is tangentially related to the 
+					   content around it (i.e., a secondary content); content 
+					   that is not considered part of the main, header and footer
+					   sections of a document (e.g., sidebars, pull quotes, 
+					   ads, etc.)
 			
 			section tags should be used to improve the SEMANTIC STRUCTURE of a web 
 			page and enhance accessibility for users relying on assistive technologies
@@ -97,6 +108,14 @@
 			</nav>
 		</header>
 		
+		<!-- 
+			this element can be defined, with CSS, to be placed 
+		    on the side, or anywhere 
+		-->
+		<aside>
+			<p>Aside content (secondary content).</p>
+		</aside>
+
 		<main>
 			<h1>Page main content.</h1>
 			<p>Some text without section tag.</p>
