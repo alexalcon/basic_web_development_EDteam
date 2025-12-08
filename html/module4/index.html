@@ -34,5 +34,46 @@
 		<a href="/"><p>Home page.</p></a>
 		<a href="./">Current page.</a>
 		<a href="./contact.html"><p>Contact page.</p></a>
+
+		<hr>
+
+		<!-- 
+			link attributes
+
+			the href attribute si a must in the <a> tag
+			
+			some optional attributes are:
+
+				* target: it specifies where to open the linked document
+					* _self: default value, opens the linked document in the same frame as it 
+				      was clicked (current tab)
+					* _blank: opens the linked document in a new tab or window
+					* _parent: opens the linked document in the parent frame
+					* _top: opens the linked document in the full body of the window
+				* title: it specifies extra information about the link, shown as a tooltip text 
+						 when the mouse moves over the link
+				* rel="nofollow": it specifies that the search engines should not follow 
+				                  the link
+				* download: it specifies that the target will be downloaded when a user clicks 
+				            on the link; the target must be in the local server, i.e., the same
+				            server as the current page (if it links to an external link resource,
+							it does not download the target)
+		-->
+		<!-- ─────────────────────────────────────────────────────────────────────────────── -->
+		<!--
+			target="_blank" is useful to open external links, otherwise the user stops 
+		    browsing the current website
+
+			it is not a good practice (idea) to navigate away from the current website
+		-->
+		<a href="./contact.html" target="_blank" title="Contact page">
+			<p>Open <mark><code>./contact.html</code></mark> in a new tab.</p>
+		</a>
+		
+		<hr>
+		
+		<img src="./hope_to_die.jpg" alt="Hope to die">
+		<a href="./hope_to_die.jpg" download=""><p>Download</p></a>
+		<!-- ─────────────────────────────────────────────────────────────────────────────── -->
 	</body>
 </html>
