@@ -1,0 +1,98 @@
+# .gitignore for a basic front-end web learning project.
+# Tailored for HTML/CSS/JS + Astro learning materials.
+# Keep lock files (package-lock.json, yarn.lock, pnpm-lock.yaml) committed by default.
+
+# -----------------
+# OS / system files
+# -----------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ------------
+# Editor / IDE
+# ------------
+# .vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.iml
+
+# ----------------------
+# Node / package manager
+# ----------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnp/
+.pnp.js
+
+# -----------------------
+# Build / output / caches
+# -----------------------
+dist/
+build/
+public/build/
+.cache/
+.parcel-cache/
+.vite/
+.vite/
+.rollup.cache
+
+# Astro specific
+.astro/
+public/_astro/
+
+# ------------------------------------------
+# Vercel / Netlify / common deploy artifacts
+# ------------------------------------------
+.vercel/
+.vercel_build_output/
+netlify.toml
+
+# -------------------
+# Env files / secrets
+# -------------------
+.env
+.env.*
+env.local
+*.local
+
+# --------------------
+# Logs, coverage, temp
+# --------------------
+*debug.log
+*.log
+logs/
+coverage/
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+*.swp
+
+# -------------------------
+# Misc / language artifacts
+# -------------------------
+# Python (sometimes present on machines) - harmless to ignore
+__pycache__/
+*.py[cod]
+
+# -------------------------
+# Binary or build artifacts
+# -------------------------
+*.class
+*.o
+*.so
+
+# ---------------------
+# Directories to ignore
+# ---------------------
+/code_examples/*
+
+# End of .gitignore
