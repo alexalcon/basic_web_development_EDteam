@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Module 6 - Tables</title>
+
+		<style>
+			table {
+				border-collapse: collapse;
+			}
+			td {
+				border: 1px solid red;
+				padding: .25em .5em;
+			}
+		</style>
+    </head>
+
+    <body>
+        <!-- 
+            we use the <table></table> tag to create tabular data 
+
+			rows are created with the <tr></tr> tag
+
+			cells are divisions of each row, they are 
+			marked up with two types:
+				
+				1. header cells: <th></th>
+				2. data cells: <td></td>
+        -->
+
+		<table>
+			<tr>
+				<td></td>
+				<td>Monday</td>
+				<td>Tuesday</td>
+				<td>Wednesday</td>
+			</tr>
+			<tr>
+				<td>Incomes</td>
+				<td>100</td>
+				<td>200</td>
+				<td>100</td>
+			</tr>
+			<tr>
+				<td>Outcomes</td>
+				<td>75</td>
+				<td>220</td>
+				<td>100</td>
+			</tr>
+			<tr>
+				<td>Salary</td>
+				<td>25</td>
+				<td>-20</td>
+				<td>0</td>
+			</tr>
+			<tr>
+				<td>Final</td>
+				<td>50</td>
+				<td>0</td>
+				<td>25</td>
+			</tr>
+		</table>
+
+		<hr>
+
+		<!-- 
+			complete structure of a table includes:
+				<table>
+					<caption></caption> (optional)
+					<th>
+						<td></td>
+						<td></td>
+					</th> 
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<td></td>
+						<td></td>
+					</tfoot>
+				</table>
+		-->
+
+		<h2>Complete Table Structure</h2>
+
+		<table>
+			<caption>Weekly Financial Report</caption>
+			<thead style="color: greenyellow;">
+				<tr>
+					<th></th>
+					<th>Monday</th>
+					<th>Tuesday</th>
+					<th>Wednesday</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Incomes</td>
+					<td>100</td>
+					<td>200</td>
+					<td>100</td>
+				</tr>
+				<tr>
+					<td>Outcomes</td>
+					<td>75</td>
+					<td>220</td>
+					<td>100</td>
+				</tr>
+				<tr>
+					<td>Salary</td>
+					<td>25</td>
+					<td>-20</td>
+					<td>0</td>
+				</tr>
+			</tbody>
+			<tfoot style="background-color: lightpink;">
+				<tr>
+					<td>Final</td>
+					<td>50</td>
+					<td>0</td>
+					<td>25</td>
+				</tr>
+			</tfoot>
+		</table>
+
+		<hr>
+
+		<!-- 
+			grouping cells 
+			
+			we use the following atributes:
+				* colspan="n"  -> to span n columns
+				* rowspan="n"  -> to span n rows		
+		-->
+
+		<h2>Grouping Cells</h2>
+
+		<table>
+			<caption>Weekly Financial Report</caption>
+			<thead>
+				<tr>
+					<th></th>
+					<th>Monday</th>
+					<th>Tuesday</th>
+					<th>Wednesday</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="2">Incomes</td>
+					<td>100</td>
+					<td rowspan="2">200</td>
+					<td>100</td>
+				</tr>
+				<tr>
+					<td>75</td>
+					<td>220</td>
+				</tr>
+				<tr>
+					<td>Salary</td>
+					<td>25</td>
+					<td>-20</td>
+					<td>0</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="3">Final</td>
+					<td>25</td>
+				</tr>
+			</tfoot>
+		</table>
+
+		<hr>
+
+		<!-- 
+			colgroup element 
+
+			it enables us to group columns in a table and apply styles to them
+		-->
+
+		<table>
+			<colgroup>
+				<col span="3">
+				<col style="background-color: rgb(139, 225, 25);">
+			</colgroup>
+			<caption>Weekly Financial Report</caption>
+			<thead>
+				<tr>
+					<th></th>
+					<th>Monday</th>
+					<th>Tuesday</th>
+					<th>Wednesday</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="2">Incomes</td>
+					<td>100</td>
+					<td rowspan="2">200</td>
+					<td>100</td>
+				</tr>
+				<tr>
+					<td>75</td>
+					<td>220</td>
+				</tr>
+				<tr>
+					<td>Salary</td>
+					<td>25</td>
+					<td>-20</td>
+					<td>0</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="3">Final</td>
+					<td>25</td>
+				</tr>
+			</tfoot>
+		</table>
+    </body>
+</html>
