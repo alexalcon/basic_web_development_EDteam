@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Input Types</title>
+
+        <style>
+            fieldset {
+                margin-bottom: 15px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            div {
+                margin-bottom: 15px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <form action="./received.html">
+            <!-- common fundamental input types -->
+            <fieldset>
+                <legend>Input Types</legend>
+
+                <label>
+                    Text
+                    <input type="text">
+                </label>
+
+                <label>
+                    Number
+                    <input type="number">
+                </label>
+
+                <label>
+                    Calendar
+                    <input type="date"> 
+                </label>
+
+                <label>
+                    Email
+                    <input type="email">
+                </label>
+
+                <label>
+                    Telephone
+                    <input type="tel">  
+                </label>
+
+                <label>
+                    Color
+                    <input type="color">
+                </label>
+
+                <label>
+                    Password
+                    <input type="password">
+                </label>
+
+                <label for="">
+                    Range
+                    <input type="range" min="0" max="100" value="50" step="5">
+                </label>
+            </fieldset>
+
+            <!-- two special input types -->
+            <!-- ──────────────────────────────────────────────────── -->
+            <fieldset>
+                <legend>Checkbox Input Type</legend>
+
+                <label>
+                    Item1
+                    <input type="checkbox" name="items">
+                </label>
+
+                <label>
+                    Item2
+                    <input type="checkbox" name="items">
+                </label>
+
+                <label>
+                    Item3
+                    <input type="checkbox" name="items">
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Radio Input Type</legend>
+
+                <label>
+                    Radio1
+                    <input type="radio" name="radios">
+                </label>
+
+                <label>
+                    Radio2
+                    <input type="radio" name="radios">
+                </label>
+
+                <label>
+                    Radio3
+                    <input type="radio" name="radios">
+                </label>
+            </fieldset>
+
+            <div>
+                <select name="countries" id="country">
+                    <optgroup label="South America">
+                        <option value="per">Peru</option>
+                        <option value="arg">Argentina</option>
+                        <option value="chl">Chile</option>
+                    </optgroup>
+                    
+                    <optgroup label="North America">
+                        <option value="usa">United States</option>
+                        <option value="can">Canada</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div>
+                <label>Leave your comments</label>
+                <textarea name="comments" id="comments" cols="30" rows="5">
+                    This is a textarea input type.    
+                </textarea>
+            </div>
+            <!-- ──────────────────────────────────────────────────── -->
+
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>
