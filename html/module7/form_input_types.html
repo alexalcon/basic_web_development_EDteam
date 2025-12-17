@@ -76,7 +76,7 @@
 
                 <label>
                     Item1
-                    <input type="checkbox" name="items">
+                    <input type="checkbox" name="items" checked>
                 </label>
 
                 <label>
@@ -95,7 +95,7 @@
 
                 <label>
                     Radio1
-                    <input type="radio" name="radios">
+                    <input type="radio" name="radios" required>
                 </label>
 
                 <label>
@@ -113,7 +113,7 @@
                 <select name="countries" id="country">
                     <optgroup label="South America">
                         <option value="per">Peru</option>
-                        <option value="arg">Argentina</option>
+                        <option value="arg" selected>Argentina</option>
                         <option value="chl">Chile</option>
                     </optgroup>
                     
@@ -133,6 +133,17 @@
             <!-- ──────────────────────────────────────────────────── -->
 
             <input type="submit" value="Submit">
+
+            <!-- 
+                form attributes:
+
+                    * checked (for checkbox and radio input types)
+                    * selected (for option elements inside a select element)
+                    * required (makes the input mandatory to submit the form)
+                    * readonly (makes the input non-editable)
+                    * autocomplete (enables or disables the autocomplete feature,
+                                    it is an attribute of the form element)
+            -->
         </form>
     </body>
 </html>
