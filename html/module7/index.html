@@ -10,25 +10,77 @@
             div {
                 margin-bottom: 10px;
             }
+
+            fieldset {
+                margin-bottom: 15px;
+            }
         </style>
     </head>
     
     <body>
         <!-- basic structure of a form -->
 
+        <!-- 
+            <form action="./received.html">
+                <div>
+                    <input type="text" placeholder="ussername">
+                </div>
+
+                <div>
+                    <input type="text" placeholder="password">
+                </div>
+
+                <button>
+                    Send
+                </button>
+            </form> 
+        -->
+
+        <!-- extending the Structure of a Form -->
+
         <form action="./received.html">
-            <div>
-                <input type="text" placeholder="ussername">
-            </div>
+            <fieldset style="width: 300px;"> <!-- grouping related elements -->
+                <legend>User Information</legend>
+                <div>
+                    <label for="ussername">Ussername</label>
+                    <input type="text" id="ussername" placeholder="ussername" value="Alex">
+                </div>
+
+                <div>
+                    <label>
+                        Password
+                        <input type="text" placeholder="password">
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset style="width: 300px;"> <!-- grouping related elements -->
+                <legend>User Information</legend>
+                <div>
+                    <label for="ussername">Ussername</label>
+                    <input type="text" id="ussername" placeholder="ussername" value="Alex">
+                </div>
+
+                <div>
+                    <label>
+                        Password
+                        <input type="text" placeholder="password">
+                    </label>
+                </div>
+            </fieldset>
             
-            <div>
-                <input type="text" placeholder="password">
-            </div>
+            <!-- 
+                two ways to send a form:
 
-            <button>
+                 1. button inside the form
+                 2. input type="submit"
+             
+            -->
+            <!-- <button>
                 Send
-            </button>
-        </form>
-
+            </button> -->
+            
+            <input type="submit" value="Send">
+        </form> 
     </body>
 </html>
