@@ -291,3 +291,80 @@ console.log("thermal_status: " + thermal_status); // output: Normal
 let pending_tasks = 3;
 let dashboard_message = pending_tasks > 0 ? `Robot has ${pending_tasks} pending tasks` : "Robot idle - No pending tasks";
 console.log("\n" + dashboard_message); // output: Robot has 3 pending tasks
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Type Coercion with Operators
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * 
+ * Type coercion is the automatic or implicit conversion of values 
+ * from one data type to another. This often occurs when using operators 
+ * with mixed data types.
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Type Coercion with Operators");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+// string + number = string concatenation
+console.log("\nString + Number:");
+let robot_id = "ROBOT-";
+let robot_number = 42;
+console.log("robot_id + robot_number: " + (robot_id + robot_number)); // "ROBOT-42"
+console.log("typeof: " + typeof(robot_id + robot_number)); // string
+
+// number + string = string concatenation
+console.log("\nNumber + String:");
+let sensor_count = 8;
+let sensor_label = " sensors active";
+console.log("sensor_count + sensor_label: " + (sensor_count + sensor_label)); // "8 sensors active"
+
+// string - number = numeric subtraction (string coerced to number)
+console.log("\nString - Number:");
+let max_speed = "100";
+let speed_reduction = 20;
+console.log("max_speed - speed_reduction: " + (max_speed - speed_reduction)); // 80
+console.log("typeof: " + typeof(max_speed - speed_reduction)); // number
+
+// string * number = numeric multiplication
+console.log("\nString * Number:");
+let battery_cells = "4";
+let voltage_per_cell = 3.7;
+console.log("battery_cells * voltage_per_cell: " + (battery_cells * voltage_per_cell)); // 14.8
+
+// boolean to number coercion
+console.log("\nBoolean to Number:");
+let is_connected = true;
+let connection_multiplier = 100;
+console.log("is_connected * connection_multiplier: " + (is_connected * connection_multiplier)); // 100
+let is_offline = false;
+console.log("is_offline * connection_multiplier: " + (is_offline * connection_multiplier)); // 0
+
+// implicit boolean coercion in logical operations
+console.log("\nImplicit Boolean Coercion:");
+let motor_status = ""; // empty string is falsy
+let default_status = "Standby";
+console.log("motor_status || default_status: " + (motor_status || default_status)); // "Standby"
+
+let wifi_signal = 0; // 0 is falsy
+let backup_signal = 4;
+console.log("wifi_signal || backup_signal: " + (wifi_signal || backup_signal)); // 4
+
+// truthy and falsy values
+console.log("\nTruthy and Falsy Values:");
+console.log("Boolean(''): " + Boolean("")); // false (empty string)
+console.log("Boolean('connected'): " + Boolean("connected")); // true
+console.log("Boolean(0): " + Boolean(0)); // false
+console.log("Boolean(42): " + Boolean(42)); // true
+console.log("Boolean(null): " + Boolean(null)); // false
+console.log("Boolean(undefined): " + Boolean(undefined)); // false
+
+// practical dashboard example
+console.log("\nPractical Dashboard Example:");
+let robot_name = ""; // no name assigned
+let display_name = robot_name || "Unnamed Robot";
+console.log("Display name: " + display_name); // "Unnamed Robot"
+
+let error_count = 0;
+let status_indicator = error_count > 0 ? "Errors: " + error_count : "System OK";
+console.log("Status: " + status_indicator); // "System OK"
