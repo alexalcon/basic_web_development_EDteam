@@ -151,3 +151,54 @@ let str3 = "5";  // string
 
 console.log("num3 (5) != str3 ('5'): " + (num3 != str3));   // false (loose inequality)
 console.log("num3 (5) !== str3 ('5'): " + (num3 !== str3)); // true (strict inequality)
+
+/**
+ * ━━━━━━━━━━━━━━━━━
+ * Logical Operators
+ * ━━━━━━━━━━━━━━━━━
+ * 
+ * Logical operators are used to combine multiple boolean expressions
+ * and return a single boolean result. Just remember mathematical elementary 
+ * logic, i.e., propostional logic.
+ * 
+ * && (logical AND), || (logical OR), ! (logical NOT) 
+ * 
+ * This is an important topic on programming logic.
+ */
+
+console.log("━━━━━━━━━━━━━━━━━");
+console.log("Logical Operators");
+console.log("━━━━━━━━━━━━━━━━━");
+
+// logical AND (&&)
+// returns true only if both operands are true
+console.log("\nLogical AND (&&):");
+console.log("true && true: " + (true && true));     // true
+console.log("true && false: " + (true && false));   // false
+console.log("false && true: " + (false && true));   // false
+console.log("false && false: " + (false && false)); // false
+
+let hasLicense = true;
+let hasInsurance = true;
+console.log("Can drive (hasLicense && hasInsurance): " + (hasLicense && hasInsurance)); // true
+
+// logical OR (||)
+// returns true if at least one operand is true
+console.log("\nLogical OR (||):");
+console.log("true || true: " + (true || true));     // true
+console.log("true || false: " + (true || false));   // true
+console.log("false || true: " + (false || true));   // true
+console.log("false || false: " + (false || false)); // false
+
+let isWeekend = false;
+let isHoliday = true;
+console.log("Can rest (isWeekend || isHoliday): " + (isWeekend || isHoliday)); // true
+
+// logical NOT (!)
+// returns the opposite boolean value
+console.log("\nLogical NOT (!):");
+console.log("!true: " + (!true));   // false
+console.log("!false: " + (!false)); // true
+
+let isRaining = false;
+console.log("Is sunny (!isRaining): " + (!isRaining)); // true
