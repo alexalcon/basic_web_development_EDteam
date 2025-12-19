@@ -202,3 +202,92 @@ console.log("!false: " + (!false)); // true
 
 let isRaining = false;
 console.log("Is sunny (!isRaining): " + (!isRaining)); // true
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Unary and Ternary Operators
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * 
+ * Unary operators operate on a single operand to produce a result.
+ * Ternary operators operate on three operands.
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Unary and Ternary Operators");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+// ━━━━━━━━━━━━━━━
+// Unary Operators
+// ━━━━━━━━━━━━━━━
+
+console.log("\nUnary Operators:");
+
+// increment (++)
+let active_robots = 5;
+console.log("active_robots: " + active_robots);       // 5
+console.log("active_robots++: " + active_robots++);   // 5 (post-increment: returns then increments)
+console.log("active_robots: " + active_robots);       // 6
+console.log("++active_robots: " + (++active_robots)); // 7 (pre-increment: increments then returns)
+console.log("active_robots: " + active_robots);       // 7
+
+// decrement (--)
+let battery_percentage = 10;
+console.log("\nbattery_percentage: " + battery_percentage);     // 10
+console.log("battery_percentage--: " + battery_percentage--);   // 10 (post-decrement: returns then decrements)
+console.log("battery_percentage: " + battery_percentage);       // 9
+console.log("--battery_percentage: " + (--battery_percentage)); // 8 (pre-decrement: decrements then returns)
+console.log("battery_percentage: " + battery_percentage);       // 8
+
+// unary plus (+)
+// converts operand to a number
+console.log("\nUnary plus (+):");
+let sensor_reading = "42";
+console.log("typeof sensor_reading: " + typeof sensor_reading);     // string
+console.log("+sensor_reading: " + (+sensor_reading));               // 42
+console.log("typeof +sensor_reading: " + typeof (+sensor_reading)); // number
+
+// unary negation (-)
+// converts operand to a number and negates it
+console.log("\nUnary negation (-):");
+let motor_speed = 100;
+console.log("-motor_speed: " + (-motor_speed));  // -100
+let temperature_offset = "50";
+console.log("-temperature_offset: " + (-temperature_offset)); // -50
+
+// typeof operator
+// returns the type of the operand as a string
+console.log("\ntypeof operator:");
+console.log("typeof 42: " + typeof 42);               // number
+console.log("typeof 'ROS2': " + typeof 'ROS2');       // string
+console.log("typeof true: " + typeof true);           // boolean
+console.log("typeof undefined: " + typeof undefined); // undefined
+
+// ━━━━━━━━━━━━━━━━
+// Ternary Operator
+// ━━━━━━━━━━━━━━━━
+
+console.log("\nTernary Operator (? :):");
+console.log("Syntax: condition ? valueIfTrue : valueIfFalse");
+
+// basic example
+let robot_battery = 18;
+let battery_status = robot_battery >= 18 ? "Battery OK" : "Battery Low - Charge Required";
+console.log("\nrobot_battery: " + robot_battery);
+console.log("battery_status: " + battery_status); // output: Battery OK
+
+// another example
+let obstacle_distance = 85;
+let proximity_alert = obstacle_distance >= 90 ? "Clear" : obstacle_distance >= 80 ? "Caution" : obstacle_distance >= 70 ? "Warning" : "Stop";
+console.log("\nobstacle_distance: " + obstacle_distance);
+console.log("proximity_alert: " + proximity_alert); // output: Caution
+
+// practical example
+let cpu_temperature = 25;
+let thermal_status = cpu_temperature > 30 ? "Overheating" : cpu_temperature > 20 ? "Normal" : "Cool";
+console.log("\ncpu_temperature: " + cpu_temperature);
+console.log("thermal_status: " + thermal_status); // output: Normal
+
+// using ternary with expressions
+let pending_tasks = 3;
+let dashboard_message = pending_tasks > 0 ? `Robot has ${pending_tasks} pending tasks` : "Robot idle - No pending tasks";
+console.log("\n" + dashboard_message); // output: Robot has 3 pending tasks
