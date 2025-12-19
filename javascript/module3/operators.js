@@ -93,3 +93,61 @@ let age = 29;
 // using template literals with backticks (` `)
 let introduction = `My name is ${name} and I am ${age} years old.`;
 console.log(introduction); // output: My name is Alex Alcón and I am 29 years old.
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━
+ * Comparison Operators
+ * ━━━━━━━━━━━━━━━━━━━━
+ * 
+ * Comparison operators are used to compare two values 
+ * and return a boolean result (true or false).
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━");
+console.log("Comparison Operators");
+console.log("━━━━━━━━━━━━━━━━━━━━");
+
+let x = 10;
+let y = 20;
+
+console.log("x = 10, y = 20");
+console.log("──────────────");
+console.log("x == y: " + (x == y));   // equal to
+console.log("x != y: " + (x != y));   // not equal to
+console.log("x > y: " + (x > y));     // greater than
+console.log("x < y: " + (x < y));     // less than
+console.log("x >= y: " + (x >= y));   // greater than or equal to
+console.log("x <= y: " + (x <= y));   // less than or equal to
+
+// <, >, <=, >= are used with numbers (thus they are not very useful
+// with strings and are called arithmetic comparison operators)
+
+/**
+ * Equality operators are of two types:
+ *
+ * - Loose equality (==) which performs type coercion
+ *      - JS compares values after converting them to a common type
+ * - Strict equality (===) which does not perform type coercion
+ *     - JS compares both value and type without conversion 
+ */
+console.log("\nA nounce on equality operators:");
+let num = 5;   // number
+let str = "5"; // string
+
+console.log("num (5) == str ('5'): " + (num == str));   // true (loose equality)
+console.log("num (5) === str ('5'): " + (num === str)); // false (strict equality)
+
+/**
+ * Inequality operators are also of two types:
+ *
+ * - Loose inequality (!=) which performs type coercion
+ *      - JS compares values after converting them to a common type
+ * - Strict inequality (!==) which does not perform type coercion
+ *     - JS compares both value and type without conversion 
+ */
+console.log("\nA nuance on inequality operators:");
+let num3 = 5;    // number
+let str3 = "5";  // string
+
+console.log("num3 (5) != str3 ('5'): " + (num3 != str3));   // false (loose inequality)
+console.log("num3 (5) !== str3 ('5'): " + (num3 !== str3)); // true (strict inequality)
