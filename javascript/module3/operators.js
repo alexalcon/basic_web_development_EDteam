@@ -57,3 +57,39 @@ console.log("Multiplication: " + (num1 * num2));  // multiplication
 console.log("Division: " + (num1 / num2));        // division
 console.log("Modulus: " + (num1 % num2));         // modulus
 console.log("Exponentiation: " + (num1 ** num2)); // exponentiation
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━
+ * Concatenation Operator
+ * ━━━━━━━━━━━━━━━━━━━━━━
+ * 
+ * The concatenation operator (+) is used to combine two or more strings together.
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Concatenation Operator");
+console.log("━━━━━━━━━━━━━━━━━━━━━━");
+
+let str1 = "Hello, ";
+let str2 = "world!";
+let greeting = str1 + str2; // concatenation
+console.log(greeting);      // output: Hello, world!
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Template Strings (Template Literals)
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * 
+ * Template strings allow for easier string interpolation and multi-line strings.
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Template Strings (Template Literals)");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+let name = "Alex Alcón";
+let age = 29;
+
+// using template literals with backticks (` `)
+let introduction = `My name is ${name} and I am ${age} years old.`;
+console.log(introduction); // output: My name is Alex Alcón and I am 29 years old.
