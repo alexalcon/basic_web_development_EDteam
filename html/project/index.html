@@ -3,20 +3,26 @@
 <!-- index.html is the main entry point of any website. -->
 <html lang="en">
     <head>
-		  <meta charset="UTF-8">
-		  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		  <title>Manatees Swimming Academy</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title>Manatees Swimming Academy</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="./style.css">
     </head>
     
     <body>
-		<header id="header">
-			<!-- logo -->
-			 <div>
-				<img src="./images/logo.svg" alt="">
+		<!-- website logo and menu -->
+		<header id="header" class="grid grid-cols-10 container mx-auto mb-4">
+			 <!-- logo -->
+			 <div class="col-span-3">
+				<img src="./images/logo.svg" width="168.3" height="54.4" alt="Manatees Swimming Academy logo">
 			 </div>
-			 <div>
-				<nav>
-					<ul>
+			 
+			 <!-- menu -->
+			 <div class="col-span-7">
+				<nav class="flex justify-end menu">
+					<ul class="flex">
 						<li><a href="./index.html">Home</a></li>
 						<li><a href="./services.html">Services</a></li>
 						<li><a href="./clients.html">Clients</a></li>
@@ -24,15 +30,15 @@
 					</ul>
 				</nav>
 			</div>
-			<!-- menu -->
 		</header>
 
-		<div id="banner">
+		<!-- website banner image -->
+		<div id="banner" class="container mx-auto mb-8">
 			<img src="./images/natacion.webp" alt="banner image">
 		</div>
 
-		<div>
-			<main id="main">
+		<div class="grid grid-cols-10 container mx-auto gap-8 mb-8">
+			<main id="main" class="col-span-3">
 				<h1>Manatees Swimming Academy</h1>
 				<p>
 					"Hello moms! At our Swimming Academy, children and teenagers 
