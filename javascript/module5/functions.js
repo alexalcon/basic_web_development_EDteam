@@ -191,3 +191,167 @@ const robot = {
 robot.status();  // Output: R2-D2 battery: 85%
 robot.charge(10); // Output: Charged 10%. Current battery: 95%
 robot.status();  // Output: R2-D2 battery: 95%
+
+console.log("\n");
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━
+ * Anonymous Functions
+ * ━━━━━━━━━━━━━━━━━━━
+ * 
+ * Anonymous functions are functions that are defined without a name.
+ * They are often used as arguments to other functions or as immediately
+ * invoked function expressions (IIFE).
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Anonymous Functions in JavaScript");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+// 1. anonymous function assigned to a variable
+const activateShield = function() {
+    console.log("Force field shield activated");
+};
+
+activateShield(); // output: Force field shield activated
+
+console.log("\n");
+
+// 2. anonymous function as callback
+function performRobotTask(taskName, callback) {
+    console.log("Starting task: " + taskName);
+    callback();
+    console.log("Task completed: " + taskName);
+}
+
+performRobotTask("Obstacle Detection", function() {
+    console.log("Scanning for obstacles...");
+    console.log("No obstacles detected");
+});
+
+console.log("\n");
+
+// 3. anonymous arrow functions
+const scanEnvironment = () => {
+    console.log("360° environmental scan in progress");
+};
+
+const moveToCoordinates = (x, y) => {
+    console.log("Moving to coordinates: (" + x + ", " + y + ")");
+};
+
+scanEnvironment(); // output: 360° environmental scan in progress
+moveToCoordinates(10, 205); // output: Moving to coordinates: (10, 205)
+
+console.log("\n");
+
+// 4. Immediately Invoked Function Expression (IIFE)
+(function() {
+    console.log("Robot system initialization sequence");
+    console.log("Loading navigation module...");
+    console.log("Loading sensors...");
+    console.log("System ready");
+})();
+
+console.log("\n");
+
+// IIFE with parameters
+(function(robotName, mission) {
+    console.log("Deploying " + robotName + " for mission: " + mission);
+})("Explorer-5", "Mars terrain mapping");
+
+console.log("\n");
+
+// 5. anonymous functions in array methods
+const sensors = ["camera", "lidar", "ultrasonic", "infrared"];
+
+console.log("Activating sensors:");
+sensors.forEach(function(sensor) {
+    console.log("- " + sensor + " sensor: online");
+});
+
+console.log("\n");
+
+// using arrow function in array methods
+const batteryReadings = [95, 87, 92, 89, 94];
+
+const averageBattery = batteryReadings.reduce((sum, reading) => {
+    return sum + reading;
+}, 0) / batteryReadings.length;
+
+console.log("Average battery level: " + averageBattery.toFixed(2) + "%");
+
+console.log("\n");
+
+// filter with anonymous function
+const robotTemperatures = [45, 58, 72, 88, 92, 67];
+
+const overheatingComponents = robotTemperatures.filter(function(temp) {
+    return temp > 80;
+});
+
+console.log("Overheating detected in " + overheatingComponents.length + " components");
+console.log("Temperatures: " + overheatingComponents.join(", ") + "°C");
+
+console.log("\n");
+
+// map with anonymous function
+const distances = [10, 25, 50, 100];
+
+const timeToTravel = distances.map((distance) => {
+    const speed = 5; // meters per second
+    return distance / speed;
+});
+
+console.log("Time to travel distances (seconds): " + timeToTravel.join(", "));
+
+console.log("\n");
+
+// 6. anonymous function as event handler (simulated)
+const robotControlPanel = {
+    emergency_stop: function() {
+        console.log("Emergency stop activated!");
+    },
+    on_low_battery: function() {
+        console.log("Low battery warning - Returning to base");
+    },
+    on_obstacle_detected: function() {
+        console.log("Obstacle ahead - Rerouting");
+    }
+};
+
+// simulating event triggers
+console.log("Simulating robot events:");
+robotControlPanel.on_obstacle_detected();
+robotControlPanel.on_low_battery();
+
+console.log("\n");
+
+// 7. self-executing anonymous function for data privacy
+const robotModule = (function() {
+    // private variables
+    let serialNumber = "RBT-2024-X1";
+    let maintenanceLog = [];
+    
+    // public interface
+    return {
+        logMaintenance: function(action) {
+            maintenanceLog.push({
+                action: action,
+                timestamp: new Date().toISOString()
+            });
+            console.log("Maintenance logged: " + action);
+        },
+        getSerialNumber: function() {
+            return serialNumber;
+        },
+        getMaintenanceCount: function() {
+            return maintenanceLog.length;
+        }
+    };
+})();
+
+robotModule.logMaintenance("Oil change");
+robotModule.logMaintenance("Sensor calibration");
+console.log("Robot serial: " + robotModule.getSerialNumber());
+console.log("Maintenance records: " + robotModule.getMaintenanceCount());
