@@ -355,3 +355,123 @@ robotModule.logMaintenance("Oil change");
 robotModule.logMaintenance("Sensor calibration");
 console.log("Robot serial: " + robotModule.getSerialNumber());
 console.log("Maintenance records: " + robotModule.getMaintenanceCount());
+
+console.log("\n");
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━
+ * Functions as Constants
+ * ━━━━━━━━━━━━━━━━━━━━━━
+ * 
+ * In JavaScript, functions can be assigned to constants using the `const` 
+ * keyword. This means that the reference to the function cannot be changed, 
+ * but the function itself can still be invoked and used normally.
+ */
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Functions as Constants in JavaScript");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+
+/**
+ * It is important to note and remember that declaring functions as constants
+ * is a common practice to prevent accidental reassignment of function references,
+ * especially in larger codebases or collaborative projects.
+ * 
+ * Also it must be taken into account that when a function declaration is assigned 
+ * to a variable or a constant, the function itself is being stored as an anonymous
+ * function, not the return value of the function. Thus, the function can be invoked 
+ * using the variable or constant name.
+ */
+
+// 1. robot motor control function as constant
+const startMotor = function(motorId, speed) {
+    console.log("Motor " + motorId + " started at speed: " + speed + " RPM");
+};
+
+startMotor("left_wheel", 150);  // Output: Motor left_wheel started at speed: 150 RPM
+startMotor("right_wheel", 150); // Output: Motor right_wheel started at speed: 150 RPM
+
+console.log("\n");
+
+// 2. gripper control with arrow function
+const openGripper = () => {
+    console.log("Gripper opening...");
+    console.log("Gripper fully open");
+};
+
+const closeGripper = () => {
+    console.log("Gripper closing...");
+    console.log("Object secured");
+};
+
+openGripper();  // opens the robotic gripper
+closeGripper(); // closes the robotic gripper
+
+console.log("\n");
+
+// 3. sensor reading function with return value
+const readUltrasonicSensor = function() {
+    const distance = Math.floor(Math.random() * 200) + 10;
+    return distance; // returns distance in centimeters
+};
+
+const obstacleDistance = readUltrasonicSensor();
+console.log("Obstacle detected at: " + obstacleDistance + " cm");
+
+if (obstacleDistance < 30) {
+    console.log("Warning: Obstacle too close!");
+}
+
+console.log("\n");
+
+// 4. robot speed calculation
+const calculateWheelSpeed = function(linearSpeed, wheelDiameter) {
+    const wheelCircumference = Math.PI * wheelDiameter;
+    const rotationsPerSecond = linearSpeed / wheelCircumference;
+    return rotationsPerSecond * 60; // convert to RPM
+};
+
+const wheelDiameter = 10; // centimeters
+const desiredSpeed = 50;  // cm/s
+const wheelRPM = calculateWheelSpeed(desiredSpeed, wheelDiameter);
+console.log("Required wheel speed: " + wheelRPM.toFixed(2) + " RPM");
+
+console.log("\n");
+
+// 5. LED indicator control
+const setLEDColor = function(color) {
+    console.log("Robot status LED set to: " + color);
+};
+
+setLEDColor("green");  // robot is operational
+setLEDColor("yellow"); // robot is busy
+setLEDColor("red");    // robot has an error
+
+console.log("\n");
+
+// 6. temperature monitoring with arrow function
+const checkMotorTemperature = (temperature) => {
+    if (temperature > 70) {
+        return "Critical - Motor overheating!";
+    } else if (temperature > 50) {
+        return "Warning - Motor temperature elevated";
+    } else {
+        return "Normal - Motor temperature OK";
+    }
+};
+
+console.log(checkMotorTemperature(45)); // Output: Normal - Motor temperature OK
+console.log(checkMotorTemperature(65)); // Output: Warning - Motor temperature elevated
+
+console.log("\n");
+
+/**
+ * Important: trying to reassign a const function will cause an error
+ * startMotor = function() { }; // this would throw an error!
+ * however, the function can still be called normally:
+ */
+
+startMotor("arm_motor", 100); // this works perfectly
+
+console.log("\n");
