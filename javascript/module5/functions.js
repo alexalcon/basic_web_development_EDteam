@@ -475,3 +475,177 @@ console.log("\n");
 startMotor("arm_motor", 100); // this works perfectly
 
 console.log("\n");
+
+/**
+ * ━━━━━
+ * Scope
+ * ━━━━━
+ * 
+ * In JavaScript, scope refers to the current context of code, which determines the
+ * accessibility of variables and functions. JavaScript has function scope and block 
+ * scope (introduced with ES6 using `let` and `const`).
+ * 
+ * Understanding scope is crucial for managing variable lifetimes, avoiding naming 
+ * conflicts, and ensuring proper access to data within different parts of your code.
+ */
+
+console.log("━━━━━━━━━━━━━");
+console.log("Global Scope");
+console.log("━━━━━━━━━━━━━");
+
+/**
+ * Global scope: Variables and functions declared outside any function
+ * are in the global scope and can be accessed from anywhere in the code.
+ */
+
+// global variables - accessible from anywhere
+let robotName = "Atlas-X1";
+let robotBatteryLevel = 100;
+const MAX_SPEED = 200; // global constant
+
+// global function
+function displayRobotStatus() {
+    console.log("Robot: " + robotName);
+    console.log("Battery: " + robotBatteryLevel + "%");
+    console.log("Max Speed: " + MAX_SPEED + " cm/s");
+}
+
+// accessing global variables from a function
+function consumeBattery(amount) {
+    robotBatteryLevel -= amount; // modifying global variable
+    console.log("Battery consumed: " + amount + "%");
+    console.log("Remaining battery: " + robotBatteryLevel + "%");
+}
+
+// calling functions that use global variables
+displayRobotStatus();
+console.log("\n");
+
+consumeBattery(15);
+console.log("\n");
+
+displayRobotStatus(); // shows updated battery level
+console.log("\n");
+
+// another function using global variables
+function checkIfChargingNeeded() {
+    if (robotBatteryLevel < 20) {
+        console.log(robotName + " needs charging immediately!");
+    } else {
+        console.log(robotName + " battery level is adequate");
+    }
+}
+
+checkIfChargingNeeded();
+
+console.log("\n");
+
+console.log("━━━━━━━━━━━");
+console.log("Local Scope");
+console.log("━━━━━━━━━━━");
+
+/**
+ * Local scope: Variables declared inside a function (or block) 
+ * are local to that function and cannot be accessed from outside.
+ */
+
+function calibrateSensors() {
+    // local variables - only accessible inside this function
+    let sensorCount = 5;
+    let calibrationStatus = "In Progress";
+    
+    console.log("Calibrating " + sensorCount + " sensors...");
+    console.log("Status: " + calibrationStatus);
+    
+    // nested local variable in a loop
+    for (let i = 1; i <= sensorCount; i++) {
+        let sensorId = "SENS-" + i; // local to this loop iteration
+        console.log("Calibrating " + sensorId);
+    }
+    
+    calibrationStatus = "Complete";
+    console.log("Status: " + calibrationStatus);
+}
+
+calibrateSensors();
+
+// trying to access local variables from outside will cause an error
+// console.log(sensorCount); // Error! sensorCount is not defined
+// console.log(calibrationStatus); // Error! calibrationStatus is not defined
+
+console.log("\n");
+
+// example showing local scope with parameters
+function moveRobotDistance(distance) {
+    // 'distance' is a local parameter
+    let timeRequired = distance / 10; // local variable
+    let energyUsed = distance * 0.5;  // local variable
+    
+    console.log("Moving " + distance + " cm");
+    console.log("Time required: " + timeRequired + " seconds");
+    console.log("Energy used: " + energyUsed + " units");
+    
+    return energyUsed;
+}
+
+let energy1 = moveRobotDistance(100);
+let energy2 = moveRobotDistance(250);
+
+console.log("Total energy used: " + (energy1 + energy2) + " units");
+
+console.log("\n");
+
+// example showing local scope with block scope (let and const)
+function performMission() {
+    let missionPhase = "start"; // local to function
+    
+    console.log("Mission phase: " + missionPhase);
+    
+    if (missionPhase === "start") {
+        let taskCount = 3;       // local to this if block
+        const TASK_TIMEOUT = 30; // local to this if block
+        
+        console.log("Tasks to complete: " + taskCount);
+        console.log("Timeout per task: " + TASK_TIMEOUT + " seconds");
+        
+        missionPhase = "execution"; // accessing function-level variable
+    }
+    
+    // taskCount and TASK_TIMEOUT are not accessible here
+    // console.log(taskCount); // Error!
+    
+    console.log("Mission phase: " + missionPhase); // works fine
+}
+
+performMission();
+
+console.log("\n");
+
+// example showing the difference between global and local scope
+let motorSpeed = 100; // global variable
+
+function setTurboMode() {
+    let motorSpeed = 250; // local variable (different from global)
+    console.log("Inside function - Motor speed: " + motorSpeed); // uses local
+}
+
+function checkCurrentSpeed() {
+    console.log("Inside function - Motor speed: " + motorSpeed); // uses global
+}
+
+console.log("Global motor speed: " + motorSpeed); // 100
+setTurboMode(); // 250 (local)
+checkCurrentSpeed(); // 100 (global)
+console.log("Global motor speed: " + motorSpeed); // still 100
+
+console.log("\n");
+
+/**
+ * Best Practices:
+ * 
+ * - Use local variables when data is only needed within a function.
+ * - Use global variables sparingly, only for data needed across many functions.
+ * - Prefer const for values that shouldn't change.
+ * - Use let for local variables that need to change.
+ * - Avoid naming local variables the same as global variables (can be confusing).
+ */
