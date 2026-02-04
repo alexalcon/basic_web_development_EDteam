@@ -641,7 +641,7 @@ console.log("Global motor speed: " + motorSpeed); // still 100
 console.log("\n");
 
 /**
- * Best Practices:
+ * Best Practices for Using Scope:
  * 
  * - Use local variables when data is only needed within a function.
  * - Use global variables sparingly, only for data needed across many functions.
@@ -649,3 +649,66 @@ console.log("\n");
  * - Use let for local variables that need to change.
  * - Avoid naming local variables the same as global variables (can be confusing).
  */
+
+/**
+ * ━━━━━━━━━━━━━━━
+ * Arrow Functions
+ * ━━━━━━━━━━━━━━━
+ * 
+ * Arrow functions provide a concise syntax for writing functions in JavaScript.
+ * They are especially useful for short functions and callbacks.
+ * 
+ * Key features of arrow functions:
+ * 
+ * - Shorter syntax compared to traditional function expressions.
+ * - Lexical `this` binding (does not create its own `this` context).
+ * - Implicit return for single-expression functions (no need for `return` keyword). 
+ * 
+ *  This new syntax to write funtions was introduced in ES6 (ECMAScript 2015).
+ */ 
+
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Arrow Functions in JavaScript");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+// 1. basic arrow function syntax
+const greetRobot = (robotName) => {
+    console.log("Hello, " + robotName + "!");
+};
+
+greetRobot("RoboHelper"); // output: Hello, RoboHelper!
+
+console.log("\n");
+
+// 2. arrow function with implicit return
+const square = (num) => num * num;
+
+console.log("Square of 5: " + square(5)); // output: Square of 5: 25
+console.log("Square of 10: " + square(10)); // output: Square of 10: 100
+
+console.log("\n");
+
+// 3. arrow function with multiple parameters
+const addNumbers = (a, b) => a + b;
+
+console.log("Sum of 3 and 7: " + addNumbers(3, 7)); // Output: Sum of 3 and 7
+
+console.log("\n");
+
+// 4. arrow function as a callback
+const robotTasks = ["Scan area", "Collect samples", "Return to base"];
+
+robotTasks.forEach((task, index) => {
+    console.log("Task " + (index + 1) + ": " + task);
+});
+
+console.log("\n");
+
+// 5. arrow function with no parameters
+const getCurrentTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString();
+};
+
+console.log("Current Time: " + getCurrentTime());
+console.log("\n");
