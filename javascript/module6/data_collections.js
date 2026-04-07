@@ -313,3 +313,144 @@ console.log("pop() on empty array returns:", result); // undefined
 // unchanged. Examples include slice(), map(), filter(), and concat().
 // These are preferred when the original data must be preserved – a common
 // requirement in safety-critical robotics and embedded systems software.
+
+// ───────────────────────────────────────────────────────────
+// 7) The slice() method – creating a shallow copy of an array
+// ───────────────────────────────────────────────────────────
+// slice() creates a shallow copy of a portion of an array into a new array object, i.e.,
+// it does not mutate the original array. As arguments, it takes the start index (inclusive)
+// and end index (exclusive) of the portion to copy.
+//
+// Syntax: array.slice(start, end)
+//
+//   start  – index at which to begin extraction (inclusive). Negative values count
+//            from the end of the array (-1 is the last element).
+//   end    – index at which to stop extraction (exclusive). If omitted, slice copies
+//            through the end of the array.
+//
+// The returned array is a NEW array; the original array is never modified.
+
+console.log("\n───────────────────────────────────────────────────────────────");
+console.log("slice() - extracting a sub-array without modifying the original");
+console.log("───────────────────────────────────────────────────────────────");
+
+// ──────────────────────────────────────────────────────────────────────────
+// Robotics use case 1: extracting a window of sensor readings for processing
+// ──────────────────────────────────────────────────────────────────────────
+// A lidar scanner returns 360 distance samples (one per degree).
+// The navigation algorithm only needs the 60-sample forward-facing arc
+// (index 0-59) to decide whether to advance or stop.
+// slice() extracts that window without touching the full scan buffer.
+
+let lidar_scan = [];
+for (let i = 0; i < 360; i++) {
+    lidar_scan.push(200 + Math.round(Math.sin(i * Math.PI / 180) * 50)); // synthetic distances
+}
+
+let forward_arc = lidar_scan.slice(0, 60); // indices 0 – 59 (60 samples)
+
+console.log("Full scan length        :", lidar_scan.length); // 360
+console.log("Forward arc length      :", forward_arc.length); // 60
+console.log("Original scan unchanged :", lidar_scan.length === 360); // true
+console.log("First 5 forward samples :", forward_arc.slice(0, 5));
+
+// ────────────────────────────────────────────────────────────────────
+// Robotics use case 2: isolating the last N samples from a rolling log
+//                      (negative index shorthand)
+// ────────────────────────────────────────────────────────────────────
+// A temperature sensor on a motor controller logs readings every 100 ms.
+// Before triggering an overheat alert, the safety monitor averages only
+// the last 5 samples to ignore transient spikes.
+// Using a negative start index lets the code work regardless of log length.
+
+console.log("\n─── Last-N samples using negative index ───");
+
+let temp_log_c = [68, 70, 71, 73, 72, 75, 78, 82, 85, 89]; // °C readings over time
+let last_5_temps = temp_log_c.slice(-5); // last 5 elements
+
+console.log("Full temperature log :", temp_log_c);
+console.log("Last 5 samples       :", last_5_temps);      // [78, 82, 85, 89] — wait, 5 items
+console.log("Original log length  :", temp_log_c.length); // 10 – unchanged
+
+// callback arrow function to sum the last 5 temps, then divide by count for average
+let avg_temp = last_5_temps.reduce((sum, t) => sum + t, 0) / last_5_temps.length;
+console.log("Average of last 5 :", avg_temp.toFixed(1), "°C");
+
+// ──────────────────────────────────────────────────────────────────────────
+// Robotics use case 3: cloning an array to preserve the original (safe copy)
+// ──────────────────────────────────────────────────────────────────────────
+// Before running a simulation that may mutate the planned trajectory, the
+// motion planner clones the array with slice() (no arguments = full copy).
+// This guarantees the master plan is never altered by the simulation pass.
+
+console.log("\n─── Cloning a trajectory plan for simulation ───");
+
+let planned_trajectory = [0, 30, 60, 90, 120, 150]; // joint angles along planned path
+let simulation_copy    = planned_trajectory.slice(); // full shallow copy – no arguments needed
+
+console.log("planned_trajectory :", planned_trajectory);
+console.log("simulation_copy    :", simulation_copy);
+console.log("Same reference?    :", planned_trajectory === simulation_copy); // false – separate arrays
+
+// mutate only the simulation copy (e.g. optimizer adjusting angles)
+simulation_copy.push(180);
+simulation_copy[0] = 5; // small offset applied by optimizer
+
+console.log("\nAfter simulation mutations:");
+console.log("planned_trajectory :", planned_trajectory); // [0, 30, 60, 90, 120, 150] – unchanged
+console.log("simulation_copy    :", simulation_copy);    // [5, 30, 60, 90, 120, 150, 180]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Robotics use case 4: extracting a sub-trajectory between two waypoint indices
+// ─────────────────────────────────────────────────────────────────────────────
+// A long pre-computed trajectory has 10 waypoints. The robot only needs to
+// execute steps 3 through 6 (indices 3–6) for the current sub-task.
+// slice(3, 7) extracts exactly those four waypoints.
+
+console.log("\n─── Sub-trajectory extraction (slice with start + end) ───");
+
+let full_path = [
+    { id: 0, angle: 0   },
+    { id: 1, angle: 15  },
+    { id: 2, angle: 30  },
+    { id: 3, angle: 45  },  // ← sub-task start
+    { id: 4, angle: 60  },
+    { id: 5, angle: 75  },
+    { id: 6, angle: 90  },  // ← sub-task end
+    { id: 7, angle: 105 },
+    { id: 8, angle: 120 },
+    { id: 9, angle: 135 }
+];
+
+let sub_task = full_path.slice(3, 7); // indices 3, 4, 5, 6
+
+console.log("Full path waypoints :", full_path.length);   // 10
+console.log("Sub-task waypoints  :", sub_task.length);    // 4
+sub_task.forEach(wp => console.log("  id:", wp.id, "| angle:", wp.angle, "°"));
+console.log("Full path unchanged :", full_path.length === 10); // true
+
+// ─────────────────────
+// slice() method output
+// ─────────────────────
+// slice() always returns a NEW array containing the copied elements.
+// The original array is NEVER modified (non-mutating).
+// If start >= end, or the array is empty in that range, an empty array is returned.
+// If end is omitted, the copy extends to the last element of the array.
+
+console.log("\n─────────────────────");
+console.log("slice() method output");
+console.log("─────────────────────");
+
+let encoder_ticks = [100, 200, 300, 400, 500];
+
+let middle   = encoder_ticks.slice(1, 4); // [200, 300, 400]
+let from_end = encoder_ticks.slice(-2);   // [400, 500]
+let full     = encoder_ticks.slice();     // [100, 200, 300, 400, 500]
+let empty    = encoder_ticks.slice(3, 3); // []
+
+console.log("\nOriginal          :", encoder_ticks); // [100, 200, 300, 400, 500]
+console.log("slice(1, 4)       :", middle);          // [200, 300, 400]
+console.log("slice(-2)         :", from_end);        // [400, 500]
+console.log("slice() – full    :", full);            // [100, 200, 300, 400, 500]
+console.log("slice(3, 3) – empty:", empty);          // []
+console.log("Original after all slice() calls:", encoder_ticks); // unchanged
