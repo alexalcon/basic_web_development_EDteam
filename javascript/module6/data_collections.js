@@ -454,3 +454,230 @@ console.log("slice(-2)         :", from_end);        // [400, 500]
 console.log("slice() – full    :", full);            // [100, 200, 300, 400, 500]
 console.log("slice(3, 3) – empty:", empty);          // []
 console.log("Original after all slice() calls:", encoder_ticks); // unchanged
+
+
+// ─────────────────────────────────────────────────────────────
+// 8) The forEach() and map() methods – iterating with callbacks
+// ─────────────────────────────────────────────────────────────
+// forEach() and map() are non-mutating array methods that take a callback function
+// and apply it to each element of the array. forEach() executes the callback for
+// side effects (e.g., logging), while map() returns a new array containing the
+// results of applying the callback to each element.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Callback functions – anonymous functions and arrow functions
+// ─────────────────────────────────────────────────────────────────────────────
+// Both forEach() and map() receive a *callback* – a function passed as an
+// argument that the method calls for each element. There are three equivalent
+// ways to write that callback:
+//
+//  1. Named function reference (defined elsewhere):
+//        function double(x) { return x * 2; }
+//        array.map(double);
+//
+//  2. Anonymous function expression (inline, no name):
+//        array.map(function(x) { return x * 2; });
+//
+//  3. Arrow function (concise inline, most common in modern JS):
+//        array.map(x => x * 2);
+//        array.map((x, i) => x * 2);        // with index
+//        array.map((x, i, arr) => x * 2);   // with index + original array
+//
+// The callback always receives up to three arguments (in order):
+//   • element  – the current array element
+//   • index    – the element's index (optional)
+//   • array    – the array itself (optional, rarely needed)
+//
+// Arrow functions are preferred for callbacks because they are shorter and
+// avoid binding their own `this`, which sidesteps common scoping bugs in
+// class-based code (e.g., a RobotController class calling map() inside a method).
+
+// ─────────────────────────────────────────────────────────────────────────────
+// forEach() – "do something FOR EACH element" (side-effect iteration)
+// ─────────────────────────────────────────────────────────────────────────────
+// forEach() calls the callback once per element strictly for its SIDE EFFECTS –
+// writing to hardware registers, logging, updating external state, etc.
+// It always returns undefined; the return value of the callback is discarded.
+// Because it produces nothing, forEach() CANNOT be chained with map/filter/etc.
+//
+// Syntax:
+//   array.forEach(function(element, index, array) { /* side effect */ });
+//   array.forEach((element, index) => { /* side effect */ });
+
+console.log("\n─────────────────────────────────────────────────────────────────");
+console.log("forEach() – side-effect iteration (returns undefined)");
+console.log("─────────────────────────────────────────────────────────────────");
+
+// ── Robotics use case 1: sending PWM commands to motor drivers ──
+// The motion controller loops over duty-cycle values and writes each one
+// to the corresponding motor driver register (simulated with console.log).
+// This is a pure side effect – there is no new array to build.
+
+let pwm_commands = [70, 80, 60, 75]; // duty cycles for motors 0-3
+
+console.log("\n── forEach: writing PWM commands to motor drivers ──");
+
+pwm_commands.forEach(function(duty, motor_id) { // anonymous function form
+    console.log(`Motor ${motor_id} → PWM set to ${duty}%`);
+    // hardware call would be: writeRegister(MOTOR_BASE + motor_id, duty);
+});
+
+// same thing with an arrow function (preferred, more concise):
+console.log("\n── forEach (arrow function): same operation ──");
+pwm_commands.forEach((duty, motor_id) => {
+    console.log(`Motor ${motor_id} → PWM set to ${duty}%`);
+});
+
+// ── Embedded systems use case 2: writing to GPIO pins ──
+// Each entry maps a pin number to its desired output state (0 = LOW, 1 = HIGH).
+// forEach drives each write sequentially – order matters for hardware.
+
+console.log("\n── forEach: writing GPIO output states ──");
+
+const gpio_states = [
+    { pin: 4, state: 1 },
+    { pin: 7, state: 0 },
+    { pin: 12, state: 1 },
+    { pin: 15, state: 1 }
+];
+
+gpio_states.forEach(({ pin, state }) => { // destructuring in callback param
+    const level = state === 1 ? "HIGH" : "LOW";
+    console.log(`GPIO pin ${pin} → set ${level}`);
+    // hardware call: digitalWrite(pin, state);
+});
+
+// ── Robotics use case 3: accumulating a sum (external state mutation) ──
+// Summing sensor voltages to compute total power draw.
+// forEach is acceptable here because the accumulation lives OUTSIDE the array
+// (in an external variable), which is inherently a side effect.
+
+console.log("\n── forEach: accumulating total power draw ──");
+
+let current_draw_a = [0.35, 0.50, 0.28, 0.42, 0.61]; // per-motor currents (Amperes)
+let total_current  = 0;
+
+current_draw_a.forEach(current => {
+    total_current += current;
+});
+
+console.log("Per-motor currents (A) :", current_draw_a);
+console.log("Total current draw (A) :", total_current.toFixed(2));
+
+// ─────────────────────────────────────────────────────────────────────────────
+// map() – "TRANSFORM each element into something new" (non-mutating)
+// ─────────────────────────────────────────────────────────────────────────────
+// map() calls the callback on every element and collects each return value into
+// a brand-new array of the same length. The original array is untouched.
+// Because map() RETURNS a new array, it can be chained with other methods
+// (filter, reduce, slice, …), making it the workhorse of functional pipelines.
+//
+// Syntax:
+//   const result = array.map(function(element, index) { return transform(element); });
+//   const result = array.map(element => transform(element));   // arrow shorthand
+
+console.log("\n─────────────────────────────────────────────────────────────────");
+console.log("map() – transform each element, return a new array");
+console.log("─────────────────────────────────────────────────────────────────");
+
+// ── Robotics use case 1: unit conversion (degrees → radians) ──
+// Joint-angle setpoints stored in degrees must be converted to radians before
+// being sent to the inverse-kinematics solver. map() produces the converted
+// array in one line without altering the source data.
+
+let joint_setpoints_deg = [0, 45, 90, 135, 180];
+let joint_setpoints_rad = joint_setpoints_deg.map(deg => deg * (Math.PI / 180));
+
+console.log("\n── map: degrees → radians conversion ──");
+console.log("Degrees :", joint_setpoints_deg);
+console.log("Radians :", joint_setpoints_rad.map(r => parseFloat(r.toFixed(4))));
+console.log("Original array unchanged:", joint_setpoints_deg); // [0, 45, 90, 135, 180]
+
+// ── Embedded systems use case 2: ADC raw value → voltage ──
+// A 12-bit ADC (range 0–4095) reads voltages in a 0–3.3 V range.
+// map() converts every raw count to its physical voltage equivalent.
+
+console.log("\n── map: ADC raw counts → physical voltage ──");
+
+const V_REF    = 3.3;
+const ADC_MAX  = 4095;
+let adc_raw    = [0, 1024, 2048, 3072, 4095];
+let voltages_v = adc_raw.map(raw => parseFloat((raw * V_REF / ADC_MAX).toFixed(4)));
+
+console.log("ADC raw counts :", adc_raw);
+console.log("Voltages (V)   :", voltages_v); // [0, 0.825, 1.65, 2.475, 3.3]
+
+// ── Robotics use case 3: extracting a property from an array of objects ──
+// A sensor registry holds descriptor objects. map() plucks a single field
+// to build a flat array of sensor names for display or logging.
+
+console.log("\n── map: extracting a property from an array of objects ──");
+
+const sensors = [
+    { id: 0, name: "front_ultrasonic", range_cm: 400 },
+    { id: 1, name: "left_ir",          range_cm: 80  },
+    { id: 2, name: "rear_ultrasonic",  range_cm: 400 },
+    { id: 3, name: "top_tof",          range_cm: 200 }
+];
+
+let sensor_names   = sensors.map(s => s.name);
+let sensor_ranges  = sensors.map(({ range_cm }) => range_cm);  // destructuring shorthand
+
+console.log("Sensor names  :", sensor_names);
+console.log("Sensor ranges :", sensor_ranges);
+
+// ── Robotics use case 4: chaining map() with other methods ──
+// From all sensor readings, compute the deviation from a target distance,
+// then filter out sensors already within tolerance – all in a single pipeline.
+
+console.log("\n── map + filter pipeline: sensors outside tolerance ──");
+
+const target_cm   = 50;
+const tolerance   = 10;
+const readings_cm = [42, 31, 18, 55, 60, 27];
+
+const out_of_range = readings_cm
+    .map((reading, index) => ({ index, reading, deviation: Math.abs(reading - target_cm) }))
+    .filter(entry => entry.deviation > tolerance);
+
+out_of_range.forEach(({ index, reading, deviation }) => {
+    console.log(`Sensor ${index}: ${reading} cm | deviation ${deviation} cm → ADJUST`);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Why forEach() is less commonly used than map() – and when to use it
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// PREFER map() when:
+//   • You want to TRANSFORM an array and USE the result:
+//       const volts = raw.map(r => r * 3.3 / 4095);
+//   • You need to CHAIN operations (map → filter → reduce):
+//       raw.map(...).filter(...).reduce(...)
+//   • You want short, expressive, functional-style code.
+//   • The transformation is side-effect-free (pure function) – important in
+//     safety-critical robotics code where predictable behavior is required.
+//
+// map() forces you to RETURN a value from every callback invocation, which
+// makes the intent explicit: "I am producing a new array". Reviewers and
+// static-analysis tools can verify this at a glance.
+//
+// USE forEach() only when:
+//   • The operation is a SIDE EFFECT and you DO NOT need a new array:
+//       – Sending commands to hardware registers / GPIO
+//       – Writing data to a serial/CAN bus
+//       – Logging / printing diagnostics
+//       – Mutating something that lives OUTSIDE the array (accumulator, DOM, etc.)
+//   • Returning a value from the callback would be meaningless.
+//
+// A common anti-pattern to avoid:
+//   ✗  const doubled = [];
+//      values.forEach(v => doubled.push(v * 2));   // needless mutation + verbose
+//
+//   ✓  const doubled = values.map(v => v * 2);     // concise, pure, chainable
+//
+// In embedded / robotics firmware, forEach is appropriate for the "output stage"
+// of a control loop (the step that physically writes to actuators), while map()
+// belongs to the "computation stage" (unit conversions, scaling, filtering).
+//
+//   Computation stage  → map(), filter(), reduce()   (pure transforms)
+//   Output/effect stage → forEach()                  (hardware writes, logging)
