@@ -517,12 +517,12 @@ let pwm_commands = [70, 80, 60, 75]; // duty cycles for motors 0-3
 
 console.log("\n── forEach: writing PWM commands to motor drivers ──");
 
-pwm_commands.forEach(function(duty, motor_id) { // anonymous function form
+pwm_commands.forEach(function(duty, motor_id) {           // anonymous function form
     console.log(`Motor ${motor_id} → PWM set to ${duty}%`);
     // hardware call would be: writeRegister(MOTOR_BASE + motor_id, duty);
 });
 
-// same thing with an arrow function (preferred, more concise):
+// Same thing with an arrow function (preferred, more concise):
 console.log("\n── forEach (arrow function): same operation ──");
 pwm_commands.forEach((duty, motor_id) => {
     console.log(`Motor ${motor_id} → PWM set to ${duty}%`);
@@ -541,7 +541,7 @@ const gpio_states = [
     { pin: 15, state: 1 }
 ];
 
-gpio_states.forEach(({ pin, state }) => { // destructuring in callback param
+gpio_states.forEach(({ pin, state }) => {                 // destructuring in callback param
     const level = state === 1 ? "HIGH" : "LOW";
     console.log(`GPIO pin ${pin} → set ${level}`);
     // hardware call: digitalWrite(pin, state);
@@ -681,3 +681,219 @@ out_of_range.forEach(({ index, reading, deviation }) => {
 //
 //   Computation stage  → map(), filter(), reduce()   (pure transforms)
 //   Output/effect stage → forEach()                  (hardware writes, logging)
+
+// ─────────────────────────────────────────────────────────────────
+// 9) The filter() method – selecting elements that meet a condition 
+// ─────────────────────────────────────────────────────────────────
+// filter() tests each element with a callback function and returns 
+// a NEW array containing only the elements for which the callback 
+// returns true. It does not mutate the original array.
+//
+// Syntax:
+//   const result = array.filter(function(element, index, array) {
+//       return condition;
+//   });
+//
+//   const result = array.filter((element, index) => condition);
+//
+// The callback receives up to three arguments:
+//   • element  – current element being tested
+//   • index    – index of the current element
+//   • array    – the original array itself
+//
+// The callback must return a BOOLEAN-LIKE result:
+//   • true   → keep the element in the new array
+//   • false  → discard the element
+//
+// As with map() and forEach(), the callback can be written as either:
+//   • an anonymous function expression: function(x) { return x > 0; }
+//   • an arrow function: x => x > 0
+
+console.log("\n───────────────────────────────────────────────────────────────");
+console.log("filter() – selecting only elements that satisfy a condition");
+console.log("───────────────────────────────────────────────────────────────");
+
+// ── Robotics use case 1: obstacle detection from distance sensors ──
+// A mobile robot has six proximity sensors around its chassis.
+// The navigation system only cares about readings below the danger threshold.
+// filter() extracts just the dangerous readings while leaving the full sensor
+// buffer untouched for other modules.
+
+let proximity_readings_cm = [42, 31, 18, 55, 60, 27];
+let obstacle_threshold_cm = 30;
+
+let dangerous_readings = proximity_readings_cm.filter(
+    reading => reading < obstacle_threshold_cm);
+
+console.log("\n── filter: obstacle readings below threshold ──");
+console.log("All proximity readings :", proximity_readings_cm);
+console.log("Danger threshold (cm)  :", obstacle_threshold_cm);
+console.log("Dangerous readings     :", dangerous_readings); // [18, 27]
+console.log("Original array unchanged:", proximity_readings_cm);
+
+// ── Robotics use case 2: keep only active fault codes ──
+// A diagnostic module stores fault objects coming from different controllers.
+// Only active faults should be sent to the operator console.
+// filter() selects exactly those objects whose `active` flag is true.
+
+console.log("\n── filter: active fault codes only ──");
+
+let fault_log = [
+    { code: "MOTOR_OVERCURRENT", active: true  },
+    { code: "LOW_BATTERY",       active: false },
+    { code: "ENCODER_TIMEOUT",   active: true  },
+    { code: "TEMP_WARNING",      active: false }
+];
+
+let active_faults = fault_log.filter(fault => fault.active);
+
+console.log("Fault log      :", fault_log);
+console.log("Active faults  :", active_faults);
+console.log("Number active  :", active_faults.length);
+
+// ── Embedded systems use case 3: removing noisy ADC samples ──
+// A current sensor is sampled multiple times. Samples outside the valid range
+// are treated as noise or transient spikes and discarded before averaging.
+// filter() is ideal because it keeps only valid samples in a new array.
+
+console.log("\n── filter: reject noisy ADC samples ──");
+
+let adc_current_samples_ma = [510, 498, 505, 1200, 503, 495, -40, 508];
+let valid_current_samples  = adc_current_samples_ma.filter(sample => sample >= 0 && sample <= 600);
+
+console.log("Raw ADC current samples (mA) :", adc_current_samples_ma);
+console.log("Valid samples only (mA)      :", valid_current_samples);
+
+let filtered_average_ma = valid_current_samples.reduce((sum, sample) => sum + sample, 0)
+    / valid_current_samples.length;
+console.log("Average after filtering (mA) :", filtered_average_ma.toFixed(2));
+
+// ── Robotics use case 4: selecting only waypoints inside a safe workspace ──
+// A planner produces candidate waypoints. The manipulator can only reach
+// positions inside its safe workspace radius. filter() discards unreachable
+// points before the final trajectory is built.
+
+console.log("\n── filter: reachable waypoints only ──");
+
+let candidate_waypoints = [
+    { id: 0, x: 100, y:  50 },
+    { id: 1, x: 220, y: 180 },
+    { id: 2, x: 140, y:  90 },
+    { id: 3, x: 310, y: 260 },
+    { id: 4, x: 160, y: 120 }
+];
+
+let max_workspace_radius_mm = 220;
+
+let reachable_waypoints = candidate_waypoints.filter(({ x, y }) => {
+    let radius = Math.sqrt(x * x + y * y);
+    return radius <= max_workspace_radius_mm;
+});
+
+console.log("Candidate waypoints :", candidate_waypoints.length);
+console.log("Reachable waypoints :", reachable_waypoints.length);
+reachable_waypoints.forEach(({ id, x, y }) => {
+    console.log(`  waypoint ${id} → (${x}, ${y}) mm`);
+});
+
+// ── Embedded systems use case 5: keep only pins configured as outputs ──
+// A board configuration table contains both input and output pins.
+// Before writing a state update, firmware selects only output-capable pins.
+
+console.log("\n── filter: pins configured as outputs ──");
+
+let pin_config = [
+    { pin: 2, mode: "INPUT"  },
+    { pin: 3, mode: "OUTPUT" },
+    { pin: 4, mode: "OUTPUT" },
+    { pin: 5, mode: "INPUT"  },
+    { pin: 6, mode: "OUTPUT" }
+];
+
+let output_pins = pin_config.filter(config => config.mode === "OUTPUT");
+
+console.log("All pins    :", pin_config);
+console.log("Output pins :", output_pins);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// filter() with anonymous functions vs arrow functions
+// ─────────────────────────────────────────────────────────────────────────────
+// Both callback styles do the same job. The difference is mainly syntax.
+// Anonymous functions use the `function` keyword and explicit `return`.
+// Arrow functions are shorter and are the most common style in modern JS.
+
+console.log("\n────────────────────────────────────────────────────────");
+console.log("filter() callback styles: anonymous vs arrow function");
+console.log("────────────────────────────────────────────────────────");
+
+let battery_levels_percent = [95, 72, 49, 18, 83, 26];
+
+let low_battery_anon = battery_levels_percent.filter(function(level) {
+    return level < 30;
+});
+
+let low_battery_arrow = battery_levels_percent.filter(level => level < 30);
+
+console.log("Battery levels         :", battery_levels_percent);
+console.log("Anonymous function     :", low_battery_anon);
+console.log("Arrow function         :", low_battery_arrow);
+
+// If you need more callback parameters, you can include them explicitly:
+let low_battery_with_index = battery_levels_percent.filter((level, index) => {
+    return level < 30 && index >= 2;
+});
+
+console.log("Arrow with index       :", low_battery_with_index);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Why filter() is widely used
+// ─────────────────────────────────────────────────────────────────────────────
+// filter() is widely used because it expresses intent very clearly:
+//   "From this array, keep only the elements that satisfy a condition."
+//
+// It is preferred over manual loops when:
+//   • You want concise, declarative code.
+//   • You need a NEW array instead of mutating the original.
+//   • You want to chain operations cleanly:
+//       readings.filter(...).map(...).reduce(...)
+//   • You are building a data-processing pipeline, common in robotics software
+//     for sensor filtering, event selection, diagnostics, and safety checks.
+//
+// A manual loop can do the same thing, but is more verbose:
+//   let result = [];
+//   for (let i = 0; i < values.length; ++i) {
+//       if (condition(values[i])) {
+//           result.push(values[i]);
+//       }
+//   }
+//
+// filter() packages that pattern into a single method call, making the code
+// easier to read and less error-prone.
+//
+// Use filter() when:
+//   • You are SELECTING a subset of elements.
+//   • You need to preserve the original array.
+//   • The condition can be expressed independently for each element.
+//
+// Do NOT use filter() when:
+//   • You need side effects only → use forEach().
+//   • You need to transform every element → use map().
+//   • You need one final accumulated value → use reduce().
+//
+// In robotics and embedded systems, filter() is especially useful for:
+//   • Keeping only unsafe sensor readings
+//   • Selecting active alarms / faults
+//   • Removing noisy or invalid measurements
+//   • Keeping only valid actuator or pin configurations
+//   • Building safe sublists before sending commands downstream
+
+// ──────────────────────
+// filter() method output
+// ──────────────────────
+// filter() always returns a NEW array.
+// The new array may have:
+//   • fewer elements than the original
+//   • the same number of elements
+//   • zero elements (empty array)
+//
+// The original array is never modified.
