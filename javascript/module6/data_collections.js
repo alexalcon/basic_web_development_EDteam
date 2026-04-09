@@ -1271,3 +1271,237 @@ const alarm_display = alarm_token.toUpperCase();
 console.log("\n── toUpperCase: promoting an alarm token for the HMI display ──");
 console.log("Internal token :", alarm_token);
 console.log("HMI display    :", alarm_display); // "MOTOR_OVERCURRENT"
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Object values and property access
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
+
+console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+console.log("Object values and property access");
+console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+// ─────────────────────────────────────────────────────────────────
+// 1) Accessing object properties – dot notation vs bracket notation
+// ─────────────────────────────────────────────────────────────────
+// JavaScript objects store data as key–value pairs.
+// There are two syntaxes for reading or writing a property:
+//
+//   Dot notation      → object.propertyName
+//   Bracket notation  → object["propertyName"]
+//
+// Both notations read from (and write to) the exact same property.
+// The difference is purely syntactic:
+//
+//   • Dot notation is shorter and more readable. Use it whenever the property
+//     name is a valid identifier (no spaces, no hyphens, does not start with
+//     a digit) and is known at write time.
+//
+//   • Bracket notation accepts ANY string as the key, including names with
+//     spaces, hyphens, or names stored in a variable. Use it when:
+//       – The property name contains special characters or spaces.
+//       – The property name is computed at runtime (e.g. stored in a variable).
+//       – You are iterating over properties dynamically.
+
+console.log("\n─────────────────────────────────────────────────────");
+console.log("1) Property access – dot notation vs bracket notation");
+console.log("─────────────────────────────────────────────────────");
+
+// ─── Robotics use case: reading IMU sensor data ───
+// An IMU (Inertial Measurement Unit) is described by an object containing its
+// identifier, model, firmware version, and current readings.
+
+const imu_sensor = {
+    id           : 2,
+    name         : "imu_main",
+    model        : "MPU-6050",
+    firmware_ver : "1.4.2",
+    roll_deg     : 3.7,
+    pitch_deg    : -1.2,
+    yaw_deg      : 178.5
+};
+
+// ─── Dot notation ───
+console.log("\n─── Dot notation ───");
+console.log("id          :", imu_sensor.id);           // 2
+console.log("name        :", imu_sensor.name);         // "imu_main"
+console.log("model       :", imu_sensor.model);        // "MPU-6050"
+console.log("firmware    :", imu_sensor.firmware_ver); // "1.4.2"
+console.log("roll (deg)  :", imu_sensor.roll_deg);     // 3.7
+console.log("pitch (deg) :", imu_sensor.pitch_deg);    // -1.2
+console.log("yaw (deg)   :", imu_sensor.yaw_deg);      // 178.5
+
+// ─── Bracket notation with a string literal ───
+// Functionally identical to dot notation; useful for property names that contain
+// special characters such as hyphens that would not be valid in dot notation.
+
+console.log("\n─── Bracket notation (string literal) ───");
+console.log("id          :", imu_sensor["id"]);           // 2
+console.log("name        :", imu_sensor["name"]);         // "imu_main"
+console.log("model       :", imu_sensor["model"]);        // "MPU-6050"
+console.log("firmware    :", imu_sensor["firmware_ver"]); // "1.4.2"
+console.log("roll (deg)  :", imu_sensor["roll_deg"]);     // 3.7
+console.log("pitch (deg) :", imu_sensor["pitch_deg"]);    // -1.2
+console.log("yaw (deg)   :", imu_sensor["yaw_deg"]);      // 178.5
+
+// ── Bracket notation with a variable key ──
+// This is the main practical advantage of bracket notation: the property name
+// can be computed at runtime. A control loop can select which axis to read
+// based on a variable supplied by the caller, without writing a separate
+// branch for each axis.
+
+console.log("\n─── Bracket notation (variable key) ───");
+
+const axes = ["roll_deg", "pitch_deg", "yaw_deg"];
+
+axes.forEach(axis => {
+    console.log(`${axis.padEnd(12)}: ${imu_sensor[axis]}°`);
+});
+
+// ── Bracket notation with special-character keys ──
+// Dot notation would be a syntax error for keys that contain hyphens or spaces.
+// Bracket notation handles them transparently.
+
+console.log("\n─── Bracket notation (keys with hyphens / spaces – invalid for dot) ───");
+
+const device_meta = {
+    "device-id"   : "RBT-004",
+    "hw-revision" : "rev3",
+    "last status" : "nominal"
+};
+
+// These would cause a SyntaxError with dot notation:
+// device_meta.device-id   → interpreted as subtraction
+// device_meta.last status → invalid identifier (space)
+
+console.log("device-id   :", device_meta["device-id"]);   // "RBT-004"
+console.log("hw-revision :", device_meta["hw-revision"]); // "rev3"
+console.log("last status :", device_meta["last status"]); // "nominal"
+
+// ─────────────────────────────────────────────
+// 2) Object.keys() – getting all property names
+// ─────────────────────────────────────────────
+// Object.keys(obj) returns a NEW array containing the names (keys) of all own,
+// enumerable properties of obj, in insertion order.
+//
+// Syntax:
+//   const keys = Object.keys(obj);
+//
+// It does NOT include inherited properties (from prototypes).
+// The returned array can be iterated with forEach(), map(), filter(), etc.
+
+console.log("\n────────────────────────────────────────────────");
+console.log("2) Object.keys() – retrieving all property names");
+console.log("────────────────────────────────────────────────");
+
+// ── Robotics use case: enumerating the fields of a robot status snapshot ──
+// A status report object is built at runtime. Before serialising it to JSON
+// and sending it over a TCP socket, the diagnostics module lists every field
+// name so the receiver can validate that no mandatory key is missing.
+
+const robot_status = {
+    timestamp_ms   : 1712648400000,
+    battery_pct    : 87,
+    velocity_ms    : 0.42,
+    heading_deg    : 95.3,
+    mode           : "AUTONOMOUS",
+    active_faults  : 0
+};
+
+const status_keys = Object.keys(robot_status);
+
+console.log("\nRobot status object :", robot_status);
+console.log("Keys                :", status_keys);
+// ["timestamp_ms", "battery_pct", "velocity_ms", "heading_deg", "mode", "active_faults"]
+console.log("Number of fields    :", status_keys.length); // 6
+
+// ── Using Object.keys() to iterate over all properties ──
+// Combining Object.keys() with bracket notation lets you loop over every
+// property without knowing the field names in advance – useful when the
+// object schema varies at runtime.
+
+console.log("\n─── Iterating over status fields with Object.keys() ───");
+status_keys.forEach(key => {
+    console.log(`  ${key.padEnd(16)}: ${robot_status[key]}`);
+});
+
+// ── Embedded systems use case: checking for required configuration keys ──
+// A configuration object is loaded from a JSON file at boot.
+// Before proceeding, firmware verifies that all mandatory keys are present.
+
+console.log("\n── Object.keys(): checking for required config keys ──");
+
+const loaded_config = {
+    baud_rate      : 115200,
+    can_bitrate    : 500000,
+    watchdog_ms    : 50
+    // "log_level" key is intentionally missing to simulate an incomplete config
+};
+
+const required_keys = ["baud_rate", "can_bitrate", "watchdog_ms", "log_level"];
+const present_keys  = Object.keys(loaded_config);
+
+required_keys.forEach(key => {
+    const found = present_keys.includes(key);
+    console.log(`  ${key.padEnd(16)}: ${found ? "✓ present" : "✗ MISSING"}`);
+});
+
+// ────────────────────────────────────────────────
+// 3) Object.values() – getting all property values
+// ────────────────────────────────────────────────
+// Object.values(obj) returns a NEW array containing the values of all own,
+// enumerable properties of obj, in the same insertion order as Object.keys().
+//
+// Syntax:
+//   const values = Object.values(obj);
+//
+// The returned array can be passed directly to array methods such as
+// reduce(), filter(), some(), and every().
+
+console.log("\n───────────────────────────────────────────────────");
+console.log("3) Object.values() – retrieving all property values");
+console.log("───────────────────────────────────────────────────");
+
+// ─── Robotics use case: computing total power consumption ───
+// Each motor in a mobile base is described by its power draw in watts.
+// Object.values() extracts all watt values so reduce() can sum them in one line.
+
+const motor_power_w = {
+    front_left  : 12.4,
+    front_right : 11.9,
+    rear_left   : 13.1,
+    rear_right  : 12.7
+};
+
+const power_values   = Object.values(motor_power_w);
+const total_power_w  = power_values.reduce((sum, w) => sum + w, 0);
+
+console.log("\nMotor power object (W) :", motor_power_w);
+console.log("Values array           :", power_values);             // [12.4, 11.9, 13.1, 12.7]
+console.log("Total power draw (W)   :", total_power_w.toFixed(1)); // 50.1
+
+// ─── Embedded systems use case: checking that all sensor voltages are in range ───
+// A power-monitoring object stores the supply voltages read from multiple rails.
+// Object.values() feeds every() to confirm all rails are within the ±5 % band.
+
+console.log("\n── Object.values(): all power-rail voltages within spec? ──");
+
+const supply_voltages_v = {
+    rail_3v3  : 3.29,
+    rail_5v   : 5.01,
+    rail_12v  : 11.97,
+    rail_neg5 : -5.03
+};
+
+const nominal_v       = { rail_3v3: 3.3, rail_5v: 5.0, rail_12v: 12.0, rail_neg5: -5.0 };
+const voltage_tol_pct = 0.05; // 5 %
+
+const all_in_spec = Object.keys(supply_voltages_v).every(rail => {
+    const measured = supply_voltages_v[rail];
+    const nominal  = nominal_v[rail];
+    return Math.abs(measured - nominal) / Math.abs(nominal) <= voltage_tol_pct;
+});
+
+console.log("Supply voltages :", supply_voltages_v);
+console.log("All rails in spec (±5%) :", all_in_spec); // true
