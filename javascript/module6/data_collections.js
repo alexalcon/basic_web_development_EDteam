@@ -1505,3 +1505,105 @@ const all_in_spec = Object.keys(supply_voltages_v).every(rail => {
 
 console.log("Supply voltages :", supply_voltages_v);
 console.log("All rails in spec (±5%) :", all_in_spec); // true
+
+/**
+ * ━━━━━━━━━━━━━
+ * Math and Date
+ * ━━━━━━━━━━━━━
+ */
+
+console.log("\n━━━━━━━━━━━━━");
+console.log("Math and Date");
+console.log("━━━━━━━━━━━━━");
+
+// ──────────────────────────────────────────────────────────────
+// Math – built-in object with mathematical constants and methods
+// ──────────────────────────────────────────────────────────────
+
+// ─── constants ───
+console.log("\n── Math constants ──");
+console.log("Math.PI  :", Math.PI);   // 3.14159…  – circle ratio, used for arc/rotation calculations
+console.log("Math.E   :", Math.E);    // 2.71828…  – Euler's number, used in exponential decay models
+
+// ─── rounding ───
+console.log("\n── Rounding ──");
+console.log("Math.round(4.6) :", Math.round(4.6)); // 5  – nearest integer
+console.log("Math.floor(4.9) :", Math.floor(4.9)); // 4  – round DOWN (e.g. grid-cell index)
+console.log("Math.ceil(4.1)  :", Math.ceil(4.1));  // 5  – round UP  (e.g. buffer allocation)
+console.log("Math.trunc(4.9) :", Math.trunc(4.9)); // 4  – drop fractional part (no rounding)
+
+// ─── absolute value, power, square root ───
+console.log("\n── abs / pow / sqrt ──");
+let error_signal = -2.7; // PID error term (can be negative)
+console.log("Math.abs(-2.7)  :", Math.abs(error_signal));  // 2.7  – magnitude regardless of sign
+console.log("Math.pow(2, 10) :", Math.pow(2, 10));         // 1024 – 2^10 (e.g. ADC full-scale count)
+console.log("Math.sqrt(144)  :", Math.sqrt(144));           // 12   – Euclidean distance component
+
+// euclidean distance between two 2-D waypoints
+let dx = 30, dy = 40;
+let dist = Math.sqrt(dx * dx + dy * dy);
+console.log(`Distance (${dx}, ${dy}) → origin: ${dist} mm`); // 50 mm
+
+// ─── min / max ───
+console.log("\n── min / max ──");
+let sensor_a = 18, sensor_b = 42, sensor_c = 7;
+console.log("Closest obstacle :", Math.min(sensor_a, sensor_b, sensor_c), "cm"); // 7
+console.log("Farthest reading :", Math.max(sensor_a, sensor_b, sensor_c), "cm"); // 42
+
+// clamp a PWM duty cycle to the valid range 0–100 %
+let raw_pwm = 130;
+let clamped_pwm = Math.min(100, Math.max(0, raw_pwm));
+console.log(`PWM clamped (${raw_pwm}%) → ${clamped_pwm}%`); // 100
+
+// ─── trigonometry (arguments in radians) ───
+console.log("\n── trigonometry ──");
+let angle_rad = Math.PI / 4; // 45°
+console.log("sin(45°) :", Math.sin(angle_rad).toFixed(4)); // 0.7071
+console.log("cos(45°) :", Math.cos(angle_rad).toFixed(4)); // 0.7071
+console.log("atan2(1,1) rad :", Math.atan2(1, 1).toFixed(4)); // 0.7854 – heading from dx/dy
+
+// ─── random ───
+console.log("\n── Math.random() ──");
+// Math.random() returns a float in [0, 1)
+// Scale to an integer in [min, max] with: Math.floor(Math.random() * (max - min + 1)) + min
+let rand_delay_ms = Math.floor(Math.random() * 100) + 1; // 1–100 ms jitter
+console.log("Random jitter (ms) :", rand_delay_ms);
+
+// ─────────────────────────────────────────
+// Date – built-in object for time and dates
+// ─────────────────────────────────────────
+console.log("\n── Date ──");
+
+// new Date() → current local date and time
+let now = new Date();
+console.log("Current date/time :", now.toString());
+
+// ─── extracting components ───
+console.log("\n── Extracting date/time components ──");
+console.log("Full year  :", now.getFullYear());       // e.g. 2026
+console.log("Month (0-indexed) :", now.getMonth());   // 0 = January … 11 = December
+console.log("Day of month :", now.getDate());         // 1–31
+console.log("Hours      :", now.getHours());          // 0–23
+console.log("Minutes    :", now.getMinutes());        // 0–59
+console.log("Seconds    :", now.getSeconds());        // 0–59
+
+// ─── unix timestamp ───
+// getTime() returns milliseconds elapsed since 1 Jan 1970 00:00:00 UTC.
+// Commonly used to timestamp sensor readings, log events, or measure elapsed time.
+console.log("\n── Unix timestamp (ms) ──");
+let t_start = Date.now(); // equivalent to new Date().getTime()
+console.log("Timestamp (ms) :", t_start);
+
+// measure elapsed time for a simulated computation
+let sum = 0;
+for (let i = 0; i < 1_000_000; i++) sum += i;
+let elapsed_ms = Date.now() - t_start;
+console.log("Loop sum         :", sum);
+console.log("Elapsed time (ms):", elapsed_ms);
+
+// ─── constructing a specific date ───
+console.log("\n── Constructing a specific date ──");
+let launch_date = new Date(2026, 3, 9, 10, 0, 0); // month is 0-indexed: 3 = April
+console.log("Launch date :", launch_date.toLocaleDateString());  // e.g. "4/9/2026"
+console.log("Launch time :", launch_date.toLocaleTimeString());  // e.g. "10:00:00 AM"
+console.log("ISO 8601    :", launch_date.toISOString());         // "2026-04-09T…"
