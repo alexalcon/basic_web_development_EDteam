@@ -1068,3 +1068,206 @@ console.log("includes(20)   :", test_values.includes(20));        // true
 console.log("some(v > 35)   :", test_values.some(v => v > 35));   // true
 console.log("every(v >= 10) :", test_values.every(v => v >= 10)); // true
 console.log("Original array :", test_values);                     // unchanged
+
+/**
+ * ━━━━━━━━━━━━━━━━━━━
+ * String manipulation 
+ * ━━━━━━━━━━━━━━━━━━━
+ */
+
+console.log("\n━━━━━━━━━━━━━━━━━━━");
+console.log("String manipulation");
+console.log("━━━━━━━━━━━━━━━━━━━");
+
+// ──────────────────────────────────────────
+// 1) String.slice() – extracting a substring
+// ──────────────────────────────────────────
+// String.slice(start, end) works identically to Array.slice():
+//   • start  – index of the first character to include (inclusive).
+//   • end    – index at which to stop (exclusive). If omitted, copies to the
+//              end of the string.
+//   • Negative indices count from the end of the string.
+// The original string is never modified (strings in JavaScript are immutable).
+//
+// Syntax:
+//   const sub = str.slice(start, end);
+
+console.log("\n──────────────────────────────────────────");
+console.log("1) String.slice() – extracting a substring");
+console.log("──────────────────────────────────────────");
+
+// ─── Robotics use case 1: extracting a numeric payload from a fixed-width protocol frame ───
+// A serial protocol sends frames in the format: "CMD:MOVE;POS:+0123.45;CHK:A3"
+// The position value always occupies characters 13–20. slice() cuts it out
+// directly by index without any splitting or regex, then parseFloat() converts it.
+
+const serial_frame = "CMD:MOVE;POS:+0123.45;CHK:A3";
+                    
+//                    CMD:MOVE;POS:+0123.45;CHK:A3
+//                                 ^       ^
+//                                13      21
+//                    index 13 ('+') to index 21 (';')
+
+const position_str = serial_frame.slice(13, 21); // "+0123.45"
+const position_val = parseFloat(position_str);
+
+console.log("\n── slice with start + end: extracting position from protocol frame ──");
+console.log("Full frame   :", serial_frame);
+console.log("Slice(13,21) :", position_str); // "+0123.45"
+console.log("Parsed value :", position_val,  "mm");
+
+// ─── Robotics use case 2: reading the last N characters (negative start) ───
+// A CAN bus message string ends with a 2-character hex checksum.
+// Using a negative start index extracts the suffix regardless of message length.
+
+const can_message = "0x18FF50E5:DATA:FF0A3C:CS:B7";
+const checksum    = can_message.slice(-2); // last 2 characters
+
+console.log("\n── slice(-2): extracting trailing checksum ──");
+console.log("CAN message :", can_message);
+console.log("Checksum    :", checksum); // "B7"
+
+// ─── slice(" ") – splitting a string on the first space ───
+// When the separator argument is a single space character " ", slice() is typically
+// combined with indexOf(" ") to split a string at the first word boundary.
+// This is a common pattern when parsing command strings received over a
+// serial or wireless link where the first token is a command keyword and the
+// rest is the argument payload.
+
+console.log("\n─── slice with indexOf(\" \"): splitting command keyword from payload ───");
+
+// A teleoperation system receives text commands over a UDP socket.
+// Format: "<COMMAND> <PARAMETERS>"
+// – MOVE 100 -45 0   → move to coordinates (100, -45, 0)
+// – SPEED 0.75        → set drive speed to 75 %
+
+const raw_command_1  = "MOVE 100 -45 0";
+const raw_command_2  = "SPEED 0.75";
+
+const space_index_1  = raw_command_1.indexOf(" "); // 4
+const command_word_1 = raw_command_1.slice(0, space_index_1);  // "MOVE"
+const parameters_1   = raw_command_1.slice(space_index_1 + 1); // "100 -45 0"
+
+const space_index_2  = raw_command_2.indexOf(" ");
+const command_word_2 = raw_command_2.slice(0, space_index_2);  // "SPEED"
+const parameters_2   = raw_command_2.slice(space_index_2 + 1); // "0.75"
+
+console.log("Raw command 1 :", raw_command_1);
+console.log("  keyword     :", command_word_1); // "MOVE"
+console.log("  parameters  :", parameters_1);   // "100 -45 0"
+
+console.log("Raw command 2 :", raw_command_2);
+console.log("  keyword     :", command_word_2); // "SPEED"
+console.log("  parameters  :", parameters_2);   // "0.75"
+
+// ── split("") – splitting a string into individual characters ──
+// Passing an empty string "" to split() (not slice()) produces an array of
+// single characters. Here, using slice in conjunction with split("") allows
+// character-by-character processing.
+//
+// A more direct use of slice("") equivalent: split("") to decompose a string.
+// Robotics use case: a firmware log entry uses a compact hex byte string to
+// represent a sensor status register. Each character is a hex nibble.
+// Splitting on "" yields each nibble as a separate element for bitfield parsing.
+
+console.log("\n── split(\"\"): decomposing a hex status register into nibbles ──");
+
+const status_register_hex = "A3F7"; // 16-bit status register in hex
+const nibbles = status_register_hex.split(""); // ["A", "3", "F", "7"]
+
+console.log("Status register :", status_register_hex);
+console.log("Nibbles         :", nibbles); // ["A", "3", "F", "7"]
+console.log("Count           :", nibbles.length); // 4
+
+nibbles.forEach((nibble, i) => {
+    console.log(`  Nibble ${i} : 0x${nibble} = ${parseInt(nibble, 16)} (dec)`);
+});
+
+// ────────────────────────────────────────────────────────────────
+// 2) String.search() – finding a pattern with a regular expression
+// ────────────────────────────────────────────────────────────────
+// search() tests a string against a regular expression (regex) and returns the
+// index of the first match, or -1 if no match is found.
+//
+// Syntax:
+//   const index = str.search(/pattern/flags);
+//   const index = str.search(new RegExp("pattern", "flags"));
+//
+// ARGUMENT – regular expression (regex):
+//   search() takes a REGULAR EXPRESSION as its argument (not a plain string).
+//   A regular expression (or regex) is a formal language for describing patterns
+//   in text. It is written between two forward slashes: /pattern/
+//   with optional flags after the closing slash (e.g., /pattern/i for
+//   case-insensitive matching, /pattern/g for global search).
+//
+//   Regular expressions are one of the most powerful and universal tools in
+//   programming:
+//
+//     • They appear in virtually every programming language (JavaScript, Python,
+//       C, C++, Java, Go, Rust, …) with a nearly identical syntax.
+//     • They are the foundation of text processing in compilers and interpreters,
+//       shell scripts, log analysis tools, network packet filters (e.g. tcpdump,
+//       Wireshark display filters), and firmware diagnostic parsers.
+//     • In robotics and embedded systems, regexes are used to validate incoming
+//       serial / UDP / CAN frames, extract sensor values from structured log
+//       strings, and parse configuration files where hand-coded parsers would
+//       be brittle and verbose.
+//     • Learning regex unlocks a reusable skill that transfers across domains:
+//       the same pattern you write to validate a sensor frame in JavaScript
+//       works (with minor dialect differences) in Python scripts that post-process
+//       rosbag logs, in C++ with <regex>, or in a grep command on the terminal.
+//
+//   Common regex pattern elements:
+//     \d      → any digit (0–9)
+//     \w      → any word character (letters, digits, underscore)
+//     \s      → any whitespace character
+//     [A-Z]   → any uppercase letter
+//     +       → one or more of the preceding element
+//     *       → zero or more
+//     ?       → zero or one (makes the preceding element optional)
+//     ^       → start of string
+//     $       → end of string
+//     .       → any character except newline
+//
+//   search() is the simplest regex-based string method; other methods that also
+//   accept a regex include match(), matchAll(), replace(), replaceAll(), and split().
+
+// ──────────────────────────────────────────────────────────────────
+// 3) String.toLowerCase() and String.toUpperCase() – case conversion
+// ──────────────────────────────────────────────────────────────────
+// toLowerCase() converts all characters of a string to lower case.
+// toUpperCase() converts all characters of a string to upper case.
+// Both methods return a NEW string; the original is not modified.
+//
+// Syntax:
+//   const lower = str.toLowerCase();
+//   const upper = str.toUpperCase();
+
+console.log("\n──────────────────────────────────");
+console.log("3) toLowerCase() and toUpperCase()");
+console.log("──────────────────────────────────");
+
+// ── Robotics use case: normalizing an incoming command string ──
+// A voice-command module on a service robot transcribes speech to text.
+// The transcription may mix upper and lower case depending on the engine.
+// Before comparing against the command registry, the string is normalized
+// to lower case so the comparison is case-insensitive.
+
+const voice_input = "Move Forward PLEASE";
+const normalized  = voice_input.toLowerCase();
+
+console.log("\n── toLowerCase: normalizing a voice command ──");
+console.log("Raw input  :", voice_input);
+console.log("Normalized :", normalized); // "move forward please"
+
+// ── Embedded systems use case: formatting an alarm message for display ──
+// An alarm originated internally as a lowercase log token.
+// Before showing it on the operator HMI, the firmware converts it to
+// upper case so it appears as a prominent alert.
+
+const alarm_token   = "motor_overcurrent";
+const alarm_display = alarm_token.toUpperCase();
+
+console.log("\n── toUpperCase: promoting an alarm token for the HMI display ──");
+console.log("Internal token :", alarm_token);
+console.log("HMI display    :", alarm_display); // "MOTOR_OVERCURRENT"
