@@ -897,3 +897,174 @@ console.log("Arrow with index       :", low_battery_with_index);
 //   • zero elements (empty array)
 //
 // The original array is never modified.
+
+// ────────────────────────────────────────────────────────────────────────────
+// 10) The find(), includes(), some() and every() methods – checking conditions
+// ────────────────────────────────────────────────────────────────────────────
+// These methods are commonly used when the goal is not to transform an array,
+// but to ASK A QUESTION about its contents.
+//
+//   • find()      → returns the FIRST element that matches a condition
+//   • includes()  → returns true if the array contains a given value
+//   • some()      → returns true if AT LEAST ONE element matches a condition
+//   • every()     → returns true only if ALL elements match a condition
+//
+// All four methods are non-mutating: they never modify the original array.
+//
+// Modern JavaScript style notes:
+//   • find(), some(), and every() use a callback function.
+//   • Arrow functions are the most common callback style in modern JS.
+//   • find() is often paired with optional chaining (?.) and nullish coalescing (??)
+//     because it may return undefined when no element matches.
+//   • includes() does not use a callback; it directly checks whether a specific
+//     value exists in the array.
+
+// ─────────────
+// find() method
+// ─────────────
+// find() returns the FIRST element whose callback evaluates to true.
+// If no element matches, it returns undefined.
+//
+// Syntax:
+//   const match = array.find((element, index, array) => condition);
+
+console.log("\n─────────────");
+console.log("find() method");
+console.log("─────────────");
+
+// Robotics use case: locating the first sensor that needs service.
+// A diagnostics table stores sensor metadata. The maintenance routine needs
+// the first sensor whose health state is not "OK".
+
+const sensor_registry = [
+    { id: 0, name: "front_ultrasonic", health: "OK" },
+    { id: 1, name: "left_ir",          health: "OK" },
+    { id: 2, name: "rear_encoder",     health: "FAULT" },
+    { id: 3, name: "imu",              health: "OK" }
+];
+
+const first_faulty_sensor = sensor_registry.find(sensor => sensor.health !== "OK");
+
+console.log("First faulty sensor:", first_faulty_sensor);
+console.log(
+    "Sensor requiring service:",
+    `${first_faulty_sensor?.name ?? "none"} (${first_faulty_sensor?.health ?? "N/A"})`
+);
+
+// ─────────────────
+// includes() method
+// ─────────────────
+// includes() checks whether an array contains a specific value.
+// It returns true or false.
+//
+// Syntax:
+//   const exists = array.includes(value);
+//   const exists = array.includes(value, fromIndex); // optional start index
+
+console.log("\n─────────────────");
+console.log("includes() method");
+console.log("─────────────────");
+
+// Embedded systems use case: validating the current operating mode.
+// Firmware receives a mode string from a serial command parser.
+// The mode is accepted only if it belongs to the allowed set.
+
+const allowed_modes = ["IDLE", "ARMED", "CALIBRATION", "SHUTDOWN"];
+const requested_mode = "CALIBRATION";
+
+const is_valid_mode = allowed_modes.includes(requested_mode);
+
+console.log("Allowed modes  :", allowed_modes);
+console.log("Requested mode :", requested_mode);
+console.log("Mode accepted? :", is_valid_mode);
+
+// ─────────────
+// some() method
+// ─────────────
+// some() returns true if AT LEAST ONE element satisfies the condition.
+// It stops as soon as it finds the first match.
+//
+// Syntax:
+//   const result = array.some((element, index, array) => condition);
+
+console.log("\n─────────────");
+console.log("some() method");
+console.log("─────────────");
+
+// Robotics use case: checking whether any motor is overheating.
+// If any motor exceeds the safe temperature threshold, the controller must
+// raise an alert and possibly reduce power.
+
+const motor_temperatures_c = [58, 63, 71, 66];
+const overheat_limit_c = 70;
+
+const any_motor_overheating = motor_temperatures_c.some(temp => temp > overheat_limit_c);
+
+console.log("Motor temperatures (°C):", motor_temperatures_c);
+console.log("Overheat limit (°C)   :", overheat_limit_c);
+console.log("Any motor overheating?:", any_motor_overheating);
+
+// ──────────────
+// every() method
+// ──────────────
+// every() returns true only if ALL elements satisfy the condition.
+// It stops as soon as one element fails the test.
+//
+// Syntax:
+//   const result = array.every((element, index, array) => condition);
+
+console.log("\n──────────────");
+console.log("every() method");
+console.log("──────────────");
+
+// Embedded systems use case: confirming that all ADC samples are inside the
+// valid 12-bit range before the control loop uses them.
+// If even one sample is invalid, the dataset should be rejected.
+
+const adc_packet = [1023, 2047, 3072, 4095];
+
+const all_samples_valid = adc_packet.every(sample => sample >= 0 && sample <= 4095);
+
+console.log("ADC packet        :", adc_packet);
+console.log("All samples valid?:", all_samples_valid);
+
+// ────────────────────────────────────────────────────────────────────────────
+// When to use each one
+// ────────────────────────────────────────────────────────────────────────────
+// Use find() when:
+//   • You need the FIRST matching element itself.
+//   • You want to retrieve an object, not just a true/false answer.
+//
+// Use includes() when:
+//   • You need to know whether an exact primitive value exists in the array.
+//   • The check is simple membership: mode names, IDs, labels, states, etc.
+//
+// Use some() when:
+//   • You want a boolean answer to the question: "Does at least one match?"
+//   • You are checking for alarms, faults, hazards, or threshold violations.
+//
+// Use every() when:
+//   • You want a boolean answer to the question: "Do all elements pass?"
+//   • You are validating a full dataset before continuing processing.
+//
+// Quick comparison:
+//   • find()     → returns one element or undefined
+//   • includes() → returns true/false for exact value membership
+//   • some()     → returns true/false if at least one element passes
+//   • every()    → returns true/false if all elements pass
+
+// ────────────────────────────────────────────────────────────────────────────
+// Method output summary
+// ────────────────────────────────────────────────────────────────────────────
+
+console.log("\n──────────────────────────────");
+console.log("find / includes / some / every");
+console.log("──────────────────────────────");
+
+const test_values = [10, 20, 30, 40];
+
+console.log("find(v > 25)   :", test_values.find(v => v > 25));   // 30
+console.log("includes(20)   :", test_values.includes(20));        // true
+console.log("some(v > 35)   :", test_values.some(v => v > 35));   // true
+console.log("every(v >= 10) :", test_values.every(v => v >= 10)); // true
+console.log("Original array :", test_values);                     // unchanged
