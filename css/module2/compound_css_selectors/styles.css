@@ -1,0 +1,39 @@
+/*  Compound CSS Selectors - Grouping 
+    
+    They allow you to apply the same styles to multiple elements.
+*/
+
+.first-p,
+.second-p {
+    color: rgb(213, 48, 48);
+    font-weight: bold;
+}
+
+.second-p {
+    font-size: 45px;
+}
+
+
+/* Compound CSS Selectors - Combining
+    
+    They allow you to apply styles to elements that match multiple criteria.
+*/
+
+.random-p.red {
+    color: rgb(21, 63, 75);
+    font-style: oblique;
+}   
+
+/* Compound CSS Selectors - Descendant
+    
+     They allow you to apply styles to elements that are descendants of a specified element.  
+*/
+
+p {
+    color: salmon;
+}
+
+div p {
+    color: rgb(21, 63, 75);
+    font-size: 30px;
+}
