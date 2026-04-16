@@ -1,0 +1,158 @@
+/*  Selectors 
+
+    Selectors are patterns used to select the elements we want to style. They are a 
+    fundamental part of CSS and allow us to target specific HTML elements based on their 
+    type, class, id, attributes, and more.
+
+    We can classify selectors into five categories:
+
+    1. Simple Selectors (a single word)
+    2. Compound Selectors (multiple simple selectors combined)
+    3. Selectors with Operators (selectors combined with combinators)
+    4. Attribute Selectors (selectors that target elements based on their attributes)
+    ---
+    5. Pseudo-classes and Pseudo-elements (selectors that target elements in a specific 
+       state or part of an element)
+
+*/
+
+/*  Simple selector - Tag elements by their type 
+
+    They are the same HTML tags we use in our HTML code, such as body, h1, p, etc. 
+
+            <body>  <h1>  <p>
+              |       |      |
+              v       v      v
+            body    h1     p { 
+               background-color: red; 
+               color: white;
+            }
+
+     They are just used to reset the default styles of the browser, but we can 
+     also use them to apply our own styles.
+*/
+
+body {
+    background-color: red;
+}
+
+h1 {
+    color: rgb(22, 67, 215);
+    font-size: 60px;
+}
+
+/*  Simple selector - Class elements by their class 
+
+    They are defined in the HTML code with the class attribute, and in CSS we use a dot 
+    (.) followed by the class name to select them.
+
+            <p class="paragraph"> This is a paragraph. </p>
+              | 
+              v
+            .paragraph { 
+               color: white; 
+               font-size: 20px;
+            }
+
+     We can use classes to apply styles to multiple elements that share the same class, 
+     and we can also combine them with other selectors to be more specific.  
+
+     THe syntax for class selectors names are:
+
+        - Must begin with a letter (a-z or A-Z) or an underscore (_)
+        - Can contain letters, digits (0-9), hyphens (-), and underscores (_)
+        - Cannot contain spaces (use hyphens or underscores instead)
+        - Cannot start with a digit (0-9)
+        - Cannot be the same as an HTML tag name (e.g., div, p, etc.)
+        - It can also be emoji characters, but it's not recommended for better readability and compatibility.
+*/
+
+.paragraph {
+    color: white;
+    font-size: 20px;
+}
+
+.color-red {
+    color: red;
+}
+
+.color-greenyellow {
+    color: greenyellow;
+}
+
+.color-blue {
+    color: blue;
+}
+
+.bg-red {
+    background-color: red;
+}
+
+.bg-blue {
+    background-color: blue;
+}
+
+.bg-black {
+    background-color: black;
+}
+
+.custom-selector {
+    color: yellowgreen;
+    background-color: rgb(0, 0, 0);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    padding: .75em 1.5em;
+    background-color: dodgerblue;
+    color: white;
+    border-radius: .5em;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/*   Simple selector - ID selectors 
+
+    They are defined in the HTML code with the id attribute, and in CSS we use a hash 
+    symbol (#) followed by the id name to select them.
+
+            <p id="paragraph"> This is a paragraph. </p>
+              | 
+              v
+            #paragraph { 
+               color: white; 
+               font-size: 20px;
+            }
+
+     We can use IDs to apply styles to a single element that has a unique identifier, 
+     and we can also combine them with other selectors to be more specific. 
+
+     The syntax for ID selectors names are:
+
+        - Must begin with a letter (a-z or A-Z) or an underscore (_)
+        - Can contain letters, digits (0-9), hyphens (-), and underscores (_)
+        - Cannot contain spaces (use hyphens or underscores instead)
+        - Cannot start with a digit (0-9)
+        - Cannot be the same as an HTML tag name (e.g., div, p, etc.)
+        - It can also be emoji characters, but it's not recommended for better 
+        readability and compatibility.  
+    
+    ID selctors are bad practice because they have a very high specificity, which means that they 
+    will override any other selector that targets the same element, even if they are more specific. 
+    This can lead to unexpected results and make it harder to maintain our CSS code. Therefore, 
+    it's recommended to use classes instead of IDs for styling purposes, and reserve IDs for 
+    JavaScript interactions or when we need to target a specific element that cannot be targeted 
+    with a class.
+*/
+
+#header-2 {
+    color: white;
+    background-color: black;
+    font-size: 40px;
+    text-align: center;
+    padding: 1em;
+}
