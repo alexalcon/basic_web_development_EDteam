@@ -1,0 +1,39 @@
+/*  CSS Attribute Selectors
+    
+    They allow you to apply styles to elements based on their attributes.
+*/
+
+[type="text"],
+[type="password"] {
+    background-color: rgb(252, 252, 252);
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+[type="submit"] {
+    display: inline-block;
+    padding: .75em 1.5em;
+    background-color: dodgerblue;
+    color: white;
+    border-radius: .5em;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Also we can use comodin attribute selectors to select 
+   elements that have a specific attribute, regardless of its value 
+*/ 
+
+/* start with (^) */ 
+[href^="http://"] {
+    border-bottom: 1px dashed red;
+}
+
+/* end with ($) */
+[href$=".pdf"] {
+    color: blue;
+}
+/* contains (*) */
+[href*="anthropic"] {
+    font-weight: bold;
+}
