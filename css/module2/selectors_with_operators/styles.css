@@ -1,0 +1,46 @@
+/*  There are five combinators in CSS: 
+
+        - The universal selector (*) 
+        - The descendant combinator (space) 
+        - The child combinator (>) 
+        - The adjacent sibling combinator (+) 
+        - The general sibling combinator (~). 
+        
+        Each combinator has a specific meaning and is used to select 
+        elements based on their relationship in the HTML document. 
+*/
+
+/* universal selector */
+div * {
+    color: red;
+    font-size: 20px;
+    background-color: lightpink;
+}
+
+/* descendant combinator */
+div h2 {
+    color: blue;
+    font-size: 18px;
+    background-color: lightyellow;
+}
+
+/* child combinator */
+div > h2 {
+    color: green;
+    font-size: 16px;
+    background-color: lightblue;
+}
+
+/* adjacent sibling combinator */
+div + h2 {
+    color: purple;
+    font-size: 14px;
+    background-color: lightgreen;
+}
+
+/* general sibling combinator */
+article ~ h3 {
+    color: orange;
+    font-size: 60px;
+    background-color: lightgray;
+}
